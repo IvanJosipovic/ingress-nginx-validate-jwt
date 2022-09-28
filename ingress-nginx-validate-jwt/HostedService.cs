@@ -1,4 +1,7 @@
-﻿namespace ingress_nginx_validate_jwt;
+﻿using Microsoft.Extensions.Logging;
+using System.Diagnostics;
+
+namespace ingress_nginx_validate_jwt;
 
 public class HostedService : IHostedService
 {
@@ -14,6 +17,7 @@ public class HostedService : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Version: {version}", FileVersionInfo.GetVersionInfo(GetType().Assembly.Location).ProductVersion);
         _logger.LogInformation("Preloading Configuration");
         await _settingsService.GetConfiguration(cancellationToken);
     }
