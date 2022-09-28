@@ -1,0 +1,68 @@
+name: CICD
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'main'
+      - 'alpha'
+      - 'beta'
+      - 'dev'
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+env:
+  semantic_version: 19
+
+jobs:
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    outputs:
+      new_release_published: ${{ steps.semantic.outputs.new_release_published }}
+      new_release_version: ${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) || '0.0.1' }}
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Semantic Release
+      uses: cycjimmy/semantic-release-action@v2
+      id: semantic
+      with:
+        semantic_version: ${{ env.semantic_version }}
+        dry_run: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v2
+      with:
+        global-json-file: global.json
+
+    - name: .NET Build
+      run: dotnet build -c Release
+
+    - name: .NET Test
+      run: dotnet test -c Release /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+
+    - name: Coverage
+      uses: codecov/codecov-action@v3
+      with:
+        file: coverage.cobertura.xml
+
+    - name: Build Image
+      run: dotnet publish -c Release --os linux --arch x64 -p:PublishProfile=DefaultContainer -p:Version=${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) || '0.0.1' }}
+
+    - name: Docker Push
+      if: steps.semantic.outputs.new_release_published == 'true'
+      run: |
+        echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${GITHUB_ACTOR} --password-stdin
+        docker tag ingress-nginx-validate-jwt:${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) }} ghcr.io/${GITHUB_REPOSITORY}/ingress-nginx-validate-jwt:${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) }}
+        docker push ghcr.io/${GITHUB_REPOSITORY}/ingress-nginx-validate-jwt:${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) }}
+
+    - name: Semantic Release
+      if: steps.semantic.outputs.new_release_published == 'true'
+      uses: cycjimmy/semantic-release-action@v2
+      with:
+        semantic_version: ${{ env.semantic_version }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
