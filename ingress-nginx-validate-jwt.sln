@@ -5,7 +5,13 @@ VisualStudioVersion = 17.4.32916.344
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ingress-nginx-validate-jwt", "ingress-nginx-validate-jwt\ingress-nginx-validate-jwt.csproj", "{F699F52C-DBCD-4BFD-807A-0D74DB3D7253}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ingress-nginx-validate-jwt-tests", "ingress-nginx-validate-jwt-tests\ingress-nginx-validate-jwt-tests.csproj", "{587A7638-97C0-4DDC-9297-745ED5816CA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ingress-nginx-validate-jwt-tests", "ingress-nginx-validate-jwt-tests\ingress-nginx-validate-jwt-tests.csproj", "{587A7638-97C0-4DDC-9297-745ED5816CA4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B7D3A0E7-2264-4E9A-90FC-23B8F0CDE196}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\cicd.yml = .github\workflows\cicd.yml
+		.github\renovate.json = .github\renovate.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
