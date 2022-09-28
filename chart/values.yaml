@@ -14,6 +14,9 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+# Enter the OpenID Provider Configuration Url for your Identity Provider
+openIdProviderConfigurationUrl: "https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration"
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: true

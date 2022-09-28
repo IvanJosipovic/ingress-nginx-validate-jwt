@@ -21,7 +21,7 @@ public class SettingsService
     {
         if (openIdConnectConfiguration == null)
         {
-            string? configEndpoint = _configuration["OpenIdConfiguration"];
+            string? configEndpoint = _configuration["OpenIdProviderConfigurationUrl"];
 
             if (string.IsNullOrEmpty(configEndpoint))
             {
