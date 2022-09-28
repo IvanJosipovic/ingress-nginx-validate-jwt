@@ -32,6 +32,8 @@ spec:
           env:
           - name: "OpenIdProviderConfigurationUrl"
             value: "{{ .Values.openIdProviderConfigurationUrl }}"
+          - name: "Logging__LogLevel__Default"
+            value: "{{ .Values.logLevel }}"
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
