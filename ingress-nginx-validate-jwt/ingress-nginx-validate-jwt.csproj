@@ -7,10 +7,10 @@
     <RootNamespace>ingress_nginx_validate_jwt</RootNamespace>
     <UserSecretsId>1c55899c-42df-4a18-815d-93afa873bb49</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <ContainerLabel Include="org.opencontainers.image.source" Value="https://github.com/IvanJosipovic/ingress-nginx-validate-jwt" />
   </PropertyGroup>
 
   <ItemGroup>
+    <ContainerLabel Include="org.opencontainers.image.source" Value="https://github.com/IvanJosipovic/ingress-nginx-validate-jwt" />
     <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="6.23.1" />
     <PackageReference Include="Microsoft.NET.Build.Containers" Version="0.1.8" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
