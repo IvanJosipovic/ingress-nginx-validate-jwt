@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace ingress_nginx_validate_jwt;
 
@@ -20,7 +21,17 @@ public class SettingsService
     {
         if (openIdConnectConfiguration == null)
         {
-            string configEndpoint = _configuration["OpenIdConfiguration"];
+            string? configEndpoint = _configuration["OpenIdConfiguration"];
+
+            if (string.IsNullOrEmpty(configEndpoint))
+            {
+                var exp = new Exception("Unable to load OpenIdConfiguration");
+
+                _logger.LogError(exp, "Unable to load OpenIdConfiguration");
+
+                throw exp;
+            }
+
             _logger.LogInformation("Loading OpenIdConfiguration from : {config}", configEndpoint);
 
             openIdConnectConfiguration = await OpenIdConnectConfigurationRetriever.GetAsync(configEndpoint, cancellationToken);
