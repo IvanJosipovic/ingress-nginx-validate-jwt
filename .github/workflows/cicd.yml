@@ -13,8 +13,6 @@ on:
 
 env:
   semantic_version: 19
-  image_org: ingress-nginx-validate-jwt:${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version)
-  image_final: ghcr.io/${GITHUB_REPOSITORY}/ingress-nginx-validate-jwt:${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version)
 
 jobs:
   create-release:
@@ -55,7 +53,7 @@ jobs:
       run: dotnet publish -c Release --os linux --arch x64 -p:PublishProfile=DefaultContainer -p:Version=${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) || '0.0.1' }}
 
     - name: Build Tag
-      run: docker tag ${{ env.image_org }} ${{ env.image_final }}
+      run: docker tag ingress-nginx-validate-jwt:${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) ghcr.io/${GITHUB_REPOSITORY}/ingress-nginx-validate-jwt:${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version)
 
     - name: Docker Push
       if: steps.semantic.outputs.new_release_published == 'true'
