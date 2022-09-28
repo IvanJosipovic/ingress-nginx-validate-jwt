@@ -56,8 +56,8 @@ jobs:
       if: steps.semantic.outputs.new_release_published == 'true'
       run: |
         echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${GITHUB_ACTOR} --password-stdin
-        docker tag ingress-nginx-validate-jwt:${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) }} ghcr.io/${GITHUB_REPOSITORY}/ingress-nginx-validate-jwt:${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) }}
-        docker push ghcr.io/${GITHUB_REPOSITORY}/ingress-nginx-validate-jwt:${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) }}
+        docker tag ingress-nginx-validate-jwt:${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) }} ghcr.io/${GITHUB_REPOSITORY,,}/ingress-nginx-validate-jwt:${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) }}
+        docker push ghcr.io/${GITHUB_REPOSITORY,,}/ingress-nginx-validate-jwt:${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) }}
 
     - name: Semantic Release
       if: steps.semantic.outputs.new_release_published == 'true'
