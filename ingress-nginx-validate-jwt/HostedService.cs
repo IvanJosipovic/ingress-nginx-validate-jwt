@@ -7,9 +7,9 @@ public class HostedService : IHostedService
 {
     private ILogger<HostedService> _logger;
 
-    private SettingsService _settingsService;
+    private ISettingsService _settingsService;
 
-    public HostedService(ILogger<HostedService> logger, SettingsService settingsService)
+    public HostedService(ILogger<HostedService> logger, ISettingsService settingsService)
     {
         _logger = logger;
         _settingsService = settingsService;
