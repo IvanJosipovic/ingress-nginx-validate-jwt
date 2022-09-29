@@ -47,12 +47,12 @@ jobs:
       run: dotnet build -c Release
 
     - name: .NET Test
-      run: dotnet test -c Release /p:CollectCoverage=true
+      run: dotnet test -c Release --collect:"XPlat Code Coverage"
 
     - name: Coverage
       uses: codecov/codecov-action@v3
       with:
-        file: coverage.json
+        file: coverage.cobertura.xml
 
     - name: Build Image
       run: dotnet publish -c Release --os linux --arch x64 -p:PublishProfile=DefaultContainer -p:Version=${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) || '0.0.1' }}
