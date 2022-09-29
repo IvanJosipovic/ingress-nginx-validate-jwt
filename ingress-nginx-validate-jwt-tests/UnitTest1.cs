@@ -38,7 +38,7 @@ namespace ingress_nginx_validate_jwt_tests
 
             public static string GenerateJwtToken(IEnumerable<Claim> claims)
             {
-                return s_tokenHandler.WriteToken(new JwtSecurityToken(Issuer, null, claims, null, DateTime.UtcNow.AddMinutes(20), SigningCredentials));
+                return "Bearer " + s_tokenHandler.WriteToken(new JwtSecurityToken(Issuer, null, claims, null, DateTime.UtcNow.AddMinutes(20), SigningCredentials));
             }
         }
 
@@ -65,57 +65,80 @@ namespace ingress_nginx_validate_jwt_tests
                 },
                 new object[]
                 {
-                    "?tid=47c63aee-0b28-46b6-b8fa-1cfb273e761b",
+                    "?tid=11111111-1111-1111-1111-111111111111",
                     new List<Claim>
                     {
-                        new Claim("tid", "47c63aee-0b28-46b6-b8fa-1cfb273e761b")
+                        new Claim("tid", "11111111-1111-1111-1111-111111111111")
                     },
                     typeof(OkResult)
                 },
                 new object[]
                 {
-                    "?tid=47c63aee-0b28-46b6-b8fa-1cfb273e761b&aud=f2b06abf-ba7f-4fb9-8b14-d38d0d13d607",
+                    "?tid=11111111-1111-1111-1111-111111111111&aud=22222222-2222-2222-2222-222222222222",
                     new List<Claim>
                     {
-                        new Claim("tid", "47c63aee-0b28-46b6-b8fa-1cfb273e761b"),
-                        new Claim("aud", "f2b06abf-ba7f-4fb9-8b14-d38d0d13d607")
+                        new Claim("tid", "11111111-1111-1111-1111-111111111111"),
+                        new Claim("aud", "22222222-2222-2222-2222-222222222222"),
                     },
                     typeof(OkResult)
                 },
                 new object[]
                 {
-                    "?tid=47c63aee-0b28-46b6-b8fa-1cfb273e761b&aud=f2b06abf-ba7f-4fb9-8b14-d38d0d13d607&aud=17d5386c-b52a-4a0d-bf2a-89540495b39c",
+                    "?tid=11111111-1111-1111-1111-111111111111&aud=22222222-2222-2222-2222-222222222222&aud=33333333-3333-3333-3333-333333333333",
                     new List<Claim>
                     {
-                        new Claim("tid", "47c63aee-0b28-46b6-b8fa-1cfb273e761b"),
-                        new Claim("aud", "f2b06abf-ba7f-4fb9-8b14-d38d0d13d607")
+                        new Claim("tid", "11111111-1111-1111-1111-111111111111"),
+                        new Claim("aud", "33333333-3333-3333-3333-333333333333")
                     },
                     typeof(OkResult)
                 },
                 new object[]
                 {
-                    "?tid=47c63aee-0b28-46b6-b8fa-1cfb273e761b&aud=f2b06abf-ba7f-4fb9-8b14-d38d0d13d607&aud=17d5386c-b52a-4a0d-bf2a-89540495b39c",
+                    "?tid=11111111-1111-1111-1111-111111111111&aud=22222222-2222-2222-2222-222222222222&aud=33333333-3333-3333-3333-333333333333",
                     new List<Claim>
                     {
-                        new Claim("tid", "47c63aee-0b28-46b6-b8fa-1cfb273e761b"),
-                        new Claim("aud", "17d5386c-b52a-4a0d-bf2a-89540495b39c")
+                        new Claim("tid", "11111111-1111-1111-1111-111111111111"),
+                        new Claim("aud", "22222222-2222-2222-2222-222222222222"),
+                        new Claim("aud", "33333333-3333-3333-3333-333333333333")
                     },
                     typeof(OkResult)
                 },
+
+
                 new object[]
                 {
-                    "?tid=47c63aee-0b28-46b6-b8fa-1cfb273e761b&aud=f2b06abf-ba7f-4fb9-8b14-d38d0d13d607&aud=17d5386c-b52a-4a0d-bf2a-89540495b39c",
+                    "?tid=11111111-1111-1111-1111-111111111111",
                     new List<Claim>
                     {
                     },
                     typeof(UnauthorizedResult)
                 },
+
                 new object[]
                 {
-                    "?tid=47c63aee-0b28-46b6-b8fa-1cfb273e761b&aud=f2b06abf-ba7f-4fb9-8b14-d38d0d13d607&aud=17d5386c-b52a-4a0d-bf2a-89540495b39c",
+                    "?tid=11111111-1111-1111-1111-111111111111",
                     new List<Claim>
                     {
-                        new Claim("tid", "47c63aee-0b28-46b6-b8fa-1cfb273e761b")
+                        new Claim("tid", "22222222-2222-2222-2222-222222222222")
+                    },
+                    typeof(UnauthorizedResult)
+                },
+
+                new object[]
+                {
+                    "?tid=11111111-1111-1111-1111-111111111111&aud=22222222-2222-2222-2222-222222222222&aud=33333333-3333-3333-3333-333333333333",
+                    new List<Claim>
+                    {
+                    },
+                    typeof(UnauthorizedResult)
+                },
+
+                new object[]
+                {
+                    "?tid=11111111-1111-1111-1111-111111111111&aud=22222222-2222-2222-2222-222222222222&aud=33333333-3333-3333-3333-333333333333",
+                    new List<Claim>
+                    {
+                        new Claim("tid", "")
                     },
                     typeof(UnauthorizedResult)
                 },
