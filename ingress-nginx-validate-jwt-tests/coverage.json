@@ -1,0 +1,264 @@
+{
+  "ingress-nginx-validate-jwt.dll": {
+    "C:\\Repos\\ingress-nginx-validate-jwt\\ingress-nginx-validate-jwt\\HostedService.cs": {
+      "ingress_nginx_validate_jwt.HostedService": {
+        "System.Threading.Tasks.Task ingress_nginx_validate_jwt.HostedService::StopAsync(System.Threading.CancellationToken)": {
+          "Lines": {
+            "27": 0
+          },
+          "Branches": []
+        },
+        "System.Void ingress_nginx_validate_jwt.HostedService::.ctor(Microsoft.Extensions.Logging.ILogger`1<ingress_nginx_validate_jwt.HostedService>,ingress_nginx_validate_jwt.SettingsService)": {
+          "Lines": {
+            "12": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0
+          },
+          "Branches": []
+        }
+      },
+      "ingress_nginx_validate_jwt.HostedService/<StartAsync>d__3": {
+        "System.Void ingress_nginx_validate_jwt.HostedService/<StartAsync>d__3::MoveNext()": {
+          "Lines": {
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "C:\\Repos\\ingress-nginx-validate-jwt\\ingress-nginx-validate-jwt\\Program.cs": {
+      "ingress_nginx_validate_jwt.Program": {
+        "System.Void ingress_nginx_validate_jwt.Program::Main(System.String[])": {
+          "Lines": {
+            "10": 0,
+            "14": 0,
+            "16": 0,
+            "18": 0,
+            "20": 0,
+            "22": 0,
+            "26": 0,
+            "28": 0,
+            "30": 0,
+            "32": 0,
+            "33": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "C:\\Repos\\ingress-nginx-validate-jwt\\ingress-nginx-validate-jwt\\SettingsService.cs": {
+      "ingress_nginx_validate_jwt.SettingsService": {
+        "System.Void ingress_nginx_validate_jwt.SettingsService::.ctor(Microsoft.Extensions.Logging.ILogger`1<ingress_nginx_validate_jwt.SettingsService>,Microsoft.Extensions.Configuration.IConfiguration)": {
+          "Lines": {
+            "14": 0,
+            "16": 0,
+            "17": 0,
+            "18": 0
+          },
+          "Branches": []
+        }
+      },
+      "ingress_nginx_validate_jwt.SettingsService/<GetConfiguration>d__4": {
+        "System.Void ingress_nginx_validate_jwt.SettingsService/<GetConfiguration>d__4::MoveNext()": {
+          "Lines": {
+            "22": 0,
+            "24": 0,
+            "26": 0,
+            "28": 0,
+            "30": 0,
+            "32": 0,
+            "35": 0,
+            "37": 0,
+            "40": 0,
+            "41": 0
+          },
+          "Branches": [
+            {
+              "Line": 22,
+              "Offset": 26,
+              "EndOffset": 31,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 26,
+              "Offset": 54,
+              "EndOffset": 56,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 26,
+              "Offset": 54,
+              "EndOffset": 94,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            },
+            {
+              "Line": 22,
+              "Offset": 26,
+              "EndOffset": 227,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    },
+    "C:\\Repos\\ingress-nginx-validate-jwt\\ingress-nginx-validate-jwt\\Controllers\\AuthController.cs": {
+      "ingress_nginx_validate_jwt.Controllers.AuthController": {
+        "System.Void ingress_nginx_validate_jwt.Controllers.AuthController::.ctor(Microsoft.Extensions.Logging.ILogger`1<ingress_nginx_validate_jwt.Controllers.AuthController>,ingress_nginx_validate_jwt.ISettingsService,System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler)": {
+          "Lines": {
+            "23": 8,
+            "25": 8,
+            "26": 8,
+            "27": 8,
+            "28": 8
+          },
+          "Branches": []
+        },
+        "System.Void ingress_nginx_validate_jwt.Controllers.AuthController::.cctor()": {
+          "Lines": {
+            "19": 0,
+            "21": 0
+          },
+          "Branches": []
+        }
+      },
+      "ingress_nginx_validate_jwt.Controllers.AuthController/<>c__DisplayClass6_0": {
+        "System.Boolean ingress_nginx_validate_jwt.Controllers.AuthController/<>c__DisplayClass6_0::<Get>b__0(System.Security.Claims.Claim)": {
+          "Lines": {
+            "65": 26
+          },
+          "Branches": []
+        }
+      },
+      "ingress_nginx_validate_jwt.Controllers.AuthController/<Get>d__6": {
+        "System.Void ingress_nginx_validate_jwt.Controllers.AuthController/<Get>d__6::MoveNext()": {
+          "Lines": {
+            "35": 8,
+            "37": 8,
+            "39": 1,
+            "43": 7,
+            "45": 0,
+            "48": 7,
+            "50": 7,
+            "51": 7,
+            "52": 7,
+            "53": 7,
+            "54": 7,
+            "55": 7,
+            "56": 7,
+            "57": 7,
+            "59": 7,
+            "61": 7,
+            "63": 32,
+            "67": 8,
+            "69": 0,
+            "73": 5,
+            "75": 2,
+            "77": 2,
+            "79": 8
+          },
+          "Branches": [
+            {
+              "Line": 37,
+              "Offset": 66,
+              "EndOffset": 68,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 37,
+              "Offset": 66,
+              "EndOffset": 80,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 7
+            },
+            {
+              "Line": 43,
+              "Offset": 96,
+              "EndOffset": 98,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 43,
+              "Offset": 96,
+              "EndOffset": 116,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 7
+            },
+            {
+              "Line": 63,
+              "Offset": 432,
+              "EndOffset": 337,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 10
+            },
+            {
+              "Line": 67,
+              "Offset": 414,
+              "EndOffset": 416,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 0
+            },
+            {
+              "Line": 67,
+              "Offset": 414,
+              "EndOffset": 425,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 15
+            },
+            {
+              "Line": 63,
+              "Offset": 432,
+              "EndOffset": 434,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 5
+            }
+          ]
+        }
+      }
+    },
+    "C:\\Repos\\ingress-nginx-validate-jwt\\ingress-nginx-validate-jwt\\Controllers\\HealthController.cs": {
+      "ingress_nginx_validate_jwt.Controllers.HealthController": {
+        "System.Void ingress_nginx_validate_jwt.Controllers.HealthController::.ctor(Microsoft.Extensions.Logging.ILogger`1<ingress_nginx_validate_jwt.Controllers.HealthController>,ingress_nginx_validate_jwt.SettingsService)": {
+          "Lines": {
+            "13": 0,
+            "15": 0,
+            "16": 0,
+            "17": 0
+          },
+          "Branches": []
+        }
+      },
+      "ingress_nginx_validate_jwt.Controllers.HealthController/<Get>d__3": {
+        "System.Void ingress_nginx_validate_jwt.Controllers.HealthController/<Get>d__3::MoveNext()": {
+          "Lines": {
+            "22": 0,
+            "24": 0,
+            "25": 0
+          },
+          "Branches": []
+        }
+      }
+    }
+  }
+}
