@@ -1,3 +1,5 @@
+using Prometheus;
+
 namespace ingress_nginx_validate_jwt;
 
 public class Program
@@ -20,9 +22,9 @@ public class Program
 
         app.UseForwardedHeaders();
 
-        app.UseAuthorization();
-
         app.MapControllers();
+
+        app.UseMetricServer();
 
         app.Run();
     }

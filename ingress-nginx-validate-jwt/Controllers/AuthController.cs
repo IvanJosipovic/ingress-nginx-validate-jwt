@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Prometheus;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 
 namespace ingress_nginx_validate_jwt.Controllers;
 
@@ -11,6 +13,10 @@ public class AuthController : ControllerBase
     private readonly ILogger<AuthController> _logger;
 
     private SettingsService _settingsService;
+
+    private static readonly Gauge Authorized = Metrics.CreateGauge("ingress_nginx_validata_jwt_authorized", "Number of Authorized operations ongoing.");
+
+    private static readonly Gauge Unauthorized = Metrics.CreateGauge("ingress_nginx_validata_jwt_anauthorized", "Number of Unauthorized operations ongoing.");
 
     public AuthController(ILogger<AuthController> logger, SettingsService settingsService)
     {
@@ -27,7 +33,10 @@ public class AuthController : ControllerBase
 
             if (string.IsNullOrEmpty(token))
             {
-                return Unauthorized();
+                using (Unauthorized.TrackInProgress())
+                {
+                    return Unauthorized();
+                }
             }
 
             // Remove "Bearer "
@@ -54,7 +63,10 @@ public class AuthController : ControllerBase
 
                 if (!item.Value.Contains(claim))
                 {
-                    return Unauthorized();
+                    using (Unauthorized.TrackInProgress())
+                    {
+                        return Unauthorized();
+                    }
                 }
             }
 
@@ -62,7 +74,10 @@ public class AuthController : ControllerBase
         }
         catch
         {
-            return Unauthorized();
+            using (Unauthorized.TrackInProgress())
+            {
+                return Unauthorized();
+            }
         }
     }
 }
