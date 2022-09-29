@@ -10,7 +10,7 @@ helm repo add ingress-nginx-validate-jwt https://ivanjosipovic.github.io/ingress
 
 helm repo update
 
-helm template ingress-nginx-validate-jwt ingress-nginx-validate-jwt/ingress-nginx-validate-jwt --set openIdProviderConfigurationUrl="https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration"
+helm install ingress-nginx-validate-jwt ingress-nginx-validate-jwt/ingress-nginx-validate-jwt --devel --create-namespace --namespace ingress-nginx-validate-jwt --set openIdProviderConfigurationUrl="https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration"
 ```
 
 Options
