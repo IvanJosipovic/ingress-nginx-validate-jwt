@@ -1,5 +1,5 @@
 # ingress-nginx-validate-jwt
-
+[![codecov](https://codecov.io/gh/IvanJosipovic/ingress-nginx-validate-jwt/branch/main/graph/badge.svg?token=hh1FWYrH5r)](https://codecov.io/gh/IvanJosipovic/ingress-nginx-validate-jwt)
 ### What is this?
 This project is an API server which is used along with the [nginx.ingress.kubernetes.io/auth-url](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md#external-authentication) annotation for ingress-nginx and enables customizable JWT validation.
 
