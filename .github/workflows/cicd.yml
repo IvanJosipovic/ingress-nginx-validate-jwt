@@ -73,6 +73,12 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Update Helm Versionin
+      if: steps.semantic.outputs.new_release_published == 'true'
+      shell: bash
+      run: |
+          sed -i 's/0.0.1/${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) || '0.0.1' }}/' ./charts/ingress-nginx-validate-jwt/Chart.yaml
+
     - name: Run chart-releaser
       if: steps.semantic.outputs.new_release_published == 'true'
       uses: helm/chart-releaser-action@v1
