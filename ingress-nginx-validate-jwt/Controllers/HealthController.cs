@@ -8,9 +8,9 @@ public class HealthController : ControllerBase
 {
     private readonly ILogger<HealthController> _logger;
 
-    private SettingsService _settingsService;
+    private ISettingsService _settingsService;
 
-    public HealthController(ILogger<HealthController> logger, SettingsService settingsService)
+    public HealthController(ILogger<HealthController> logger, ISettingsService settingsService)
     {
         _logger = logger;
         _settingsService = settingsService;
