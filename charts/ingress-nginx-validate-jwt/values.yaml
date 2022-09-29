@@ -14,7 +14,7 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-# Enter the OpenID Provider Configuration Url for your Identity Provider
+# OpenID Provider Configuration Url for your Identity Provider
 openIdProviderConfigurationUrl: "https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration"
 
 # Log Level
