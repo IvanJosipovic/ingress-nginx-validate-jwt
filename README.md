@@ -1,6 +1,6 @@
 # ingress-nginx-validate-jwt
 
-[![codecov](https://codecov.io/gh/IvanJosipovic/ingress-nginx-validate-jwt/branch/main/graph/badge.svg?token=hh1FWYrH5r)](https://codecov.io/gh/IvanJosipovic/ingress-nginx-validate-jwt)
+[![codecov](https://codecov.io/gh/IvanJosipovic/ingress-nginx-validate-jwt/branch/alpha/graph/badge.svg?token=hh1FWYrH5r)](https://codecov.io/gh/IvanJosipovic/ingress-nginx-validate-jwt)
 
 ## What is this?
 
