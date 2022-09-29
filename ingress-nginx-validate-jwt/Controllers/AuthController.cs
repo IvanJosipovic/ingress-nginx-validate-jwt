@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Prometheus;
 using System.IdentityModel.Tokens.Jwt;
-using System.IO;
 
 namespace ingress_nginx_validate_jwt.Controllers;
 
