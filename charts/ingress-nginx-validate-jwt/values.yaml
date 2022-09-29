@@ -29,7 +29,10 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-podAnnotations: {}
+podAnnotations:
+  prometheus.io/scrape: 'true'
+  prometheus.io/port: '80'
+  prometheus.io/path: '/metrics'
 
 podSecurityContext: {}
   # fsGroup: 2000

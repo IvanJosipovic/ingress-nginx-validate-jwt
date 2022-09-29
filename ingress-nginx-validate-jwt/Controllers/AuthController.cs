@@ -13,17 +13,17 @@ public class AuthController : ControllerBase
 
     private ISettingsService _settingsService;
 
-    private JwtSecurityTokenHandler _jwtSecurityTokenHandler1;
+    private JwtSecurityTokenHandler _jwtSecurityTokenHandler;
 
     private static readonly Gauge Authorized = Metrics.CreateGauge("ingress_nginx_validata_jwt_authorized", "Number of Authorized operations ongoing.");
 
-    private static readonly Gauge Unauthorized = Metrics.CreateGauge("ingress_nginx_validata_jwt_anauthorized", "Number of Unauthorized operations ongoing.");
+    private static readonly Gauge Unauthorized = Metrics.CreateGauge("ingress_nginx_validata_jwt_unauthorized", "Number of Unauthorized operations ongoing.");
 
     public AuthController(ILogger<AuthController> logger, ISettingsService settingsService, JwtSecurityTokenHandler jwtSecurityTokenHandler)
     {
         _logger = logger;
         _settingsService = settingsService;
-        _jwtSecurityTokenHandler1 = jwtSecurityTokenHandler;
+        _jwtSecurityTokenHandler = jwtSecurityTokenHandler;
     }
 
     [HttpGet]
@@ -35,6 +35,7 @@ public class AuthController : ControllerBase
 
             if (string.IsNullOrEmpty(token))
             {
+                Unauthorized.Inc();
                 return Unauthorized();
             }
 
@@ -55,7 +56,7 @@ public class AuthController : ControllerBase
                 ClockSkew = TimeSpan.FromSeconds(0)
             };
 
-            _jwtSecurityTokenHandler1.ValidateToken(token, parameters, out SecurityToken validatedToken);
+            _jwtSecurityTokenHandler.ValidateToken(token, parameters, out SecurityToken validatedToken);
 
             var jwtToken = (JwtSecurityToken)validatedToken;
 
@@ -65,14 +66,17 @@ public class AuthController : ControllerBase
 
                 if (!item.Value.Contains(claim))
                 {
+                    Unauthorized.Inc();
                     return Unauthorized();
                 }
             }
 
+            Authorized.Inc();
             return Ok();
         }
         catch
         {
+            Unauthorized.Inc();
             return Unauthorized();
         }
     }
