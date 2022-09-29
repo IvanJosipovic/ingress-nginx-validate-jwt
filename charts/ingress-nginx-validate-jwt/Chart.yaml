@@ -1,6 +1,6 @@
 apiVersion: v2
 name: ingress-nginx-validate-jwt
-description: A tool which allows ingress-nginx to validate jwt tokens
+description: Enables ingress-nginx to validate JWT tokens
 
 # A chart can be either an 'application' or a 'library' chart.
 #
