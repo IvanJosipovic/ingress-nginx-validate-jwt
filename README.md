@@ -1,7 +1,7 @@
 # ingress-nginx-validate-jwt
 
 ### What is this?
-This project is an API server which is used along with the [nginx.ingress.kubernetes.io/auth-url](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md#external-authentication) annotation for ingresss-nginx and enables customizable JWT validation.
+This project is an API server which is used along with the [nginx.ingress.kubernetes.io/auth-url](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md#external-authentication) annotation for ingress-nginx and enables customizable JWT validation.
 
 ### Install
 
@@ -19,6 +19,7 @@ Options
   - OpenID Provider Configuration Url for your Identity Provider
 - logLevel
   - Logging Level (Trace, Debug, Information, Warning, Error, Critical, and None )
+- [Helm Values](charts/ingress-nginx-validate-jwt/values.yaml)
 
 ### Configure Ingress
 
