@@ -24,6 +24,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Configure Git
+      run: |
+        git config user.name "$GITHUB_ACTOR"
+        git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
     - name: Semantic Release
       uses: cycjimmy/semantic-release-action@v2
       id: semantic
