@@ -1,4 +1,5 @@
 using Prometheus;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace ingress_nginx_validate_jwt;
 
@@ -12,7 +13,9 @@ public class Program
 
         builder.Services.AddControllers();
 
-        builder.Services.AddSingleton<SettingsService>();
+        builder.Services.AddSingleton<ISettingsService, SettingsService>();
+
+        builder.Services.AddTransient<JwtSecurityTokenHandler>();
 
         builder.Services.AddHostedService<HostedService>();
 

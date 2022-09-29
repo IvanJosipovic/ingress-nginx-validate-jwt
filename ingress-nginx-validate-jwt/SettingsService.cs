@@ -3,7 +3,7 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace ingress_nginx_validate_jwt;
 
-public class SettingsService
+public class SettingsService : ISettingsService
 {
     private ILogger<SettingsService> _logger;
 

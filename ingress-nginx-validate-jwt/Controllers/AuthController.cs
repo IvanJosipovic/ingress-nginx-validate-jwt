@@ -12,16 +12,19 @@ public class AuthController : ControllerBase
 {
     private readonly ILogger<AuthController> _logger;
 
-    private SettingsService _settingsService;
+    private ISettingsService _settingsService;
+
+    private JwtSecurityTokenHandler _jwtSecurityTokenHandler1;
 
     private static readonly Gauge Authorized = Metrics.CreateGauge("ingress_nginx_validata_jwt_authorized", "Number of Authorized operations ongoing.");
 
     private static readonly Gauge Unauthorized = Metrics.CreateGauge("ingress_nginx_validata_jwt_anauthorized", "Number of Unauthorized operations ongoing.");
 
-    public AuthController(ILogger<AuthController> logger, SettingsService settingsService)
+    public AuthController(ILogger<AuthController> logger, ISettingsService settingsService, JwtSecurityTokenHandler jwtSecurityTokenHandler)
     {
         _logger = logger;
         _settingsService = settingsService;
+        _jwtSecurityTokenHandler1 = jwtSecurityTokenHandler;
     }
 
     [HttpGet]
@@ -33,27 +36,27 @@ public class AuthController : ControllerBase
 
             if (string.IsNullOrEmpty(token))
             {
-                using (Unauthorized.TrackInProgress())
-                {
-                    return Unauthorized();
-                }
+                return Unauthorized();
             }
 
             // Remove "Bearer "
-            token = token.Substring(7);
+            if (token.StartsWith("Bearer "))
+            {
+                token = token.Substring(7);
+            }
 
             var settings = await _settingsService.GetConfiguration(cancellationToken);
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            var parameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKeys = settings.SigningKeys,
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 ClockSkew = TimeSpan.FromSeconds(0)
-            }, out SecurityToken validatedToken);
+            };
+
+            _jwtSecurityTokenHandler1.ValidateToken(token, parameters, out SecurityToken validatedToken);
 
             var jwtToken = (JwtSecurityToken)validatedToken;
 
@@ -63,10 +66,7 @@ public class AuthController : ControllerBase
 
                 if (!item.Value.Contains(claim))
                 {
-                    using (Unauthorized.TrackInProgress())
-                    {
-                        return Unauthorized();
-                    }
+                    return Unauthorized();
                 }
             }
 
@@ -74,10 +74,7 @@ public class AuthController : ControllerBase
         }
         catch
         {
-            using (Unauthorized.TrackInProgress())
-            {
-                return Unauthorized();
-            }
+            return Unauthorized();
         }
     }
 }
