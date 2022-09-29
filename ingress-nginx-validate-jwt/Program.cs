@@ -1,8 +1,10 @@
 using Prometheus;
+using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace ingress_nginx_validate_jwt;
 
+[ExcludeFromCodeCoverage]
 public class Program
 {
     public static void Main(string[] args)

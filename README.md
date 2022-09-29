@@ -1,7 +1,7 @@
 # ingress-nginx-validate-jwt
 [![codecov](https://codecov.io/gh/IvanJosipovic/ingress-nginx-validate-jwt/branch/main/graph/badge.svg?token=hh1FWYrH5r)](https://codecov.io/gh/IvanJosipovic/ingress-nginx-validate-jwt)
 ### What is this?
-This project is an API server which is used along with the [nginx.ingress.kubernetes.io/auth-url](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md#external-authentication) annotation for ingress-nginx and enables customizable JWT validation.
+This project is an API server which is used along with the [nginx.ingress.kubernetes.io/auth-url](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md#external-authentication) annotation for ingress-nginx and enables per Ingress customizable JWT validation.
 
 ### Install
 
@@ -18,7 +18,7 @@ Options
 - openIdProviderConfigurationUrl
   - OpenID Provider Configuration Url for your Identity Provider
 - logLevel
-  - Logging Level (Trace, Debug, Information, Warning, Error, Critical, and None )
+  - Logging Level (Trace, Debug, Information, Warning, Error, Critical, and None)
 - [Helm Values](charts/ingress-nginx-validate-jwt/values.yaml)
 
 ### Configure Ingress
@@ -30,7 +30,7 @@ metadata:
   name: ingress
   namespace: default
   annotations:
-    nginx.ingress.kubernetes.io/auth-url: http://ingress-nginx-validate-jwt.ingress-nginx-validate-jwt.svc.cluster.local/auth?tid=47c63aee-0b28-46b6-b8fa-1cfb273e761b&aud=f2b06abf-ba7f-4fb9-8b14-d38d0d13d607&aud=17d5386c-b52a-4a0d-bf2a-89540495b39c
+    nginx.ingress.kubernetes.io/auth-url: http://ingress-nginx-validate-jwt.ingress-nginx-validate-jwt.svc.cluster.local/auth?tid=11111111-1111-1111-1111-111111111111&aud=22222222-2222-2222-2222-222222222222&aud=33333333-3333-3333-3333-333333333333
 spec:
 ```
 
@@ -38,6 +38,15 @@ spec:
 
 The /auth endpoint supports configurable parameters in the format of {claim}={value}. In the case the same claim is called more than once, the traffic will have to match only one.
 
-For example, using the following query string /auth?tid=47c63aee-0b28-46b6-b8fa-1cfb273e761b&aud=f2b06abf-ba7f-4fb9-8b14-d38d0d13d607&aud=17d5386c-b52a-4a0d-bf2a-89540495b39c
+For example, using the following query string
+/auth?  
+tid=11111111-1111-1111-1111-111111111111  
+&aud=22222222-2222-2222-2222-222222222222  
+&aud=33333333-3333-3333-3333-333333333333  
 
-Along with validating the JWT token, only traffic which have matching tid and aud(either of the two) claims will be authorized.
+Along with validating the JWT token, the token must have a claim tid=11111111-1111-1111-1111-111111111111 and one of aud=22222222-2222-2222-2222-222222222222
+ or aud=33333333-3333-3333-3333-333333333333
+
+### Design
+
+![alt text](/docs/validate-jwt.png)
