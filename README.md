@@ -58,5 +58,5 @@ Along with validating the JWT token, the token must have a claim tid=11111111-11
 
 | Metric Name  | Description |
 |---|---|
-| ingress_nginx_validata_jwt_authorized | Number of Authorized operations ongoing |
-| ingress_nginx_validata_jwt_unauthorized | Number of Unauthorized operations ongoing |
+| ingress_nginx_validate_jwt_authorized | Number of Authorized operations ongoing |
+| ingress_nginx_validate_jwt_unauthorized | Number of Unauthorized operations ongoing |
