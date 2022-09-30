@@ -19,6 +19,8 @@ public class AuthController : ControllerBase
 
     private static readonly Gauge Unauthorized = Metrics.CreateGauge("ingress_nginx_validate_jwt_unauthorized", "Number of Unauthorized operations ongoing.");
 
+    private static readonly Histogram ValidationDuration = Metrics.CreateHistogram("ingress_nginx_validate_jwt_duration_seconds", "Histogram of JWT validation durations.");
+
     public AuthController(ILogger<AuthController> logger, ISettingsService settingsService, JwtSecurityTokenHandler jwtSecurityTokenHandler)
     {
         _logger = logger;
@@ -29,55 +31,58 @@ public class AuthController : ControllerBase
     [HttpGet]
     public async Task<ActionResult> Get(CancellationToken cancellationToken)
     {
-        try
+        using (ValidationDuration.NewTimer())
         {
-            var token = Request.Headers.Authorization.FirstOrDefault();
-
-            if (string.IsNullOrEmpty(token))
+            try
             {
-                Unauthorized.Inc();
-                return Unauthorized();
-            }
+                var token = Request.Headers.Authorization.FirstOrDefault();
 
-            // Remove "Bearer "
-            if (token.StartsWith("Bearer "))
-            {
-                token = token.Substring(7);
-            }
-
-            var settings = await _settingsService.GetConfiguration(cancellationToken);
-
-            var parameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKeys = settings.SigningKeys,
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ClockSkew = TimeSpan.FromSeconds(0)
-            };
-
-            _jwtSecurityTokenHandler.ValidateToken(token, parameters, out SecurityToken validatedToken);
-
-            var jwtToken = (JwtSecurityToken)validatedToken;
-
-            foreach (var item in Request.Query)
-            {
-                var claim = jwtToken.Claims.First(x => x.Type == item.Key).Value;
-
-                if (!item.Value.Contains(claim))
+                if (string.IsNullOrEmpty(token))
                 {
                     Unauthorized.Inc();
                     return Unauthorized();
                 }
-            }
 
-            Authorized.Inc();
-            return Ok();
-        }
-        catch
-        {
-            Unauthorized.Inc();
-            return Unauthorized();
+                // Remove "Bearer "
+                if (token.StartsWith("Bearer "))
+                {
+                    token = token.Substring(7);
+                }
+
+                var settings = await _settingsService.GetConfiguration(cancellationToken);
+
+                var parameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKeys = settings.SigningKeys,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.FromSeconds(0)
+                };
+
+                _jwtSecurityTokenHandler.ValidateToken(token, parameters, out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+
+                foreach (var item in Request.Query)
+                {
+                    var claim = jwtToken.Claims.First(x => x.Type == item.Key).Value;
+
+                    if (!item.Value.Contains(claim))
+                    {
+                        Unauthorized.Inc();
+                        return Unauthorized();
+                    }
+                }
+
+                Authorized.Inc();
+                return Ok();
+            }
+            catch
+            {
+                Unauthorized.Inc();
+                return Unauthorized();
+            }
         }
     }
 }

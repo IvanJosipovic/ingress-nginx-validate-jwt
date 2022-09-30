@@ -60,3 +60,4 @@ Along with validating the JWT token, the token must have a claim tid=11111111-11
 |---|---|
 | ingress_nginx_validate_jwt_authorized | Number of Authorized operations ongoing |
 | ingress_nginx_validate_jwt_unauthorized | Number of Unauthorized operations ongoing |
+| ingress_nginx_validate_jwt_duration_seconds | Histogram of JWT validation durations |
