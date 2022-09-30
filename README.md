@@ -1,6 +1,6 @@
 # ingress-nginx-validate-jwt
 
-[![codecov](https://codecov.io/gh/IvanJosipovic/ingress-nginx-validate-jwt/branch/alpha/graph/badge.svg?token=hh1FWYrH5r)](https://codecov.io/gh/IvanJosipovic/ingress-nginx-validate-jwt)
+[![codecov](https://codecov.io/gh/IvanJosipovic/ingress-nginx-validate-jwt/branch/main/graph/badge.svg?token=hh1FWYrH5r)](https://codecov.io/gh/IvanJosipovic/ingress-nginx-validate-jwt)
 
 ## What is this?
 
@@ -55,6 +55,8 @@ Along with validating the JWT token, the token must have a claim tid=11111111-11
 ![alt text](/docs/validate-jwt.png)
 
 ## Metrics
+
+Metrics are exposed on :80/metrics
 
 | Metric Name  | Description |
 |---|---|
