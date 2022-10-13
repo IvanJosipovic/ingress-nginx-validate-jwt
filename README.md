@@ -37,7 +37,7 @@ metadata:
   name: ingress
   namespace: default
   annotations:
-    nginx.ingress.kubernetes.io/auth-url: http://ingress-nginx-validate-jwt.ingress-nginx-validate-jwt.svc.cluster.local/auth?tid=11111111-1111-1111-1111-111111111111&aud=22222222-2222-2222-2222-222222222222&aud=33333333-3333-3333-3333-333333333333
+    nginx.ingress.kubernetes.io/auth-url: http://ingress-nginx-validate-jwt.ingress-nginx-validate-jwt.svc.cluster.local:8080/auth?tid=11111111-1111-1111-1111-111111111111&aud=22222222-2222-2222-2222-222222222222&aud=33333333-3333-3333-3333-333333333333
 spec:
 ```
 
@@ -60,7 +60,7 @@ Along with validating the JWT token, the token must have a claim tid=11111111-11
 
 ## Metrics
 
-Metrics are exposed on :80/metrics
+Metrics are exposed on :8080/metrics
 
 | Metric Name  | Description |
 |---|---|
