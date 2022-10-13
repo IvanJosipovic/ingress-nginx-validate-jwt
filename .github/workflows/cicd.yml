@@ -54,8 +54,8 @@ jobs:
       with:
         file: coverage.cobertura.xml
 
-    - name: Build Image
-      run: dotnet publish -c Release --os linux --arch x64 -p:PublishProfile=DefaultContainer -p:Version=${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) || '0.0.1' }}
+    - name: Docker Build
+      run: docker build -t ingress-nginx-validate-jwt:${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) || '0.0.1' }} -f ./ingress-nginx-validate-jwt/Dockerfile --build-arg VERSION=${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) || '0.0.1' }} .
 
     - name: Docker Push
       if: steps.semantic.outputs.new_release_published == 'true'
@@ -78,7 +78,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Update Helm Versionin
+    - name: Update Helm Version
       if: steps.semantic.outputs.new_release_published == 'true'
       shell: bash
       run: |
