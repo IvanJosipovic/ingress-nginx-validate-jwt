@@ -8,9 +8,9 @@ RUN dotnet build "ingress-nginx-validate-jwt.csproj" -c Release -o /app/build
 
 FROM build AS publish
 ARG VERSION=0.0.1
-RUN dotnet publish "ingress-nginx-validate-jwt.csproj" -c Release -o /app/publish /p:UseAppHost=false /p:Version=${VERSION}
+RUN dotnet publish "ingress-nginx-validate-jwt.csproj" -c Release -r linux-musl-x64 -o /app/publish /p:Version=${VERSION}
 
-FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine AS base
+FROM mcr.microsoft.com/dotnet/runtime-deps:7.0-alpine AS base
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8443
@@ -23,4 +23,4 @@ RUN chown appuser:appgroup  /app
 USER appuser:appgroup
 
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ingress-nginx-validate-jwt.dll"]
+ENTRYPOINT ["./ingress-nginx-validate-jwt"]
