@@ -39,7 +39,7 @@ namespace ingress_nginx_validate_jwt_tests
             result2.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
 
             var builder = ConfidentialClientApplicationBuilder.Create("40f04710-a912-49f4-b865-47ddf5e8046e")
-                .WithClientSecret(Environment.GetEnvironmentVariable("TestClientSecret"))
+                .WithClientSecret(Environment.GetEnvironmentVariable("TESTCLIENTSECRET"))
                 .WithTenantId("b82075ce-f897-4df8-8624-47b71a1fd251")
                 .Build();
 
