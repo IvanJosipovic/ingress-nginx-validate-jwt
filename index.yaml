@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   ingress-nginx-validate-jwt:
   - apiVersion: v2
+    appVersion: 1.1.1
+    created: "2022-10-14T00:28:36.491976059Z"
+    description: Enables ingress-nginx to validate JWT tokens
+    digest: c416b6249dae737fb59eb18e2701456d2936fa93a733f8a4a89e84404adfb398
+    name: ingress-nginx-validate-jwt
+    type: application
+    urls:
+    - https://github.com/IvanJosipovic/ingress-nginx-validate-jwt/releases/download/ingress-nginx-validate-jwt-1.1.1/ingress-nginx-validate-jwt-1.1.1.tgz
+    version: 1.1.1
+  - apiVersion: v2
     appVersion: 1.1.0
     created: "2022-10-14T00:20:58.38410449Z"
     description: Enables ingress-nginx to validate JWT tokens
@@ -31,4 +41,4 @@ entries:
     urls:
     - https://github.com/IvanJosipovic/ingress-nginx-validate-jwt/releases/download/ingress-nginx-validate-jwt-1.0.0/ingress-nginx-validate-jwt-1.0.0.tgz
     version: 1.0.0
-generated: "2022-10-14T00:20:58.38411529Z"
+generated: "2022-10-14T00:28:36.491996859Z"
