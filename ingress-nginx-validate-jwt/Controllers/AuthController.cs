@@ -78,8 +78,12 @@ public class AuthController : ControllerBase
                 Authorized.Inc();
                 return Ok();
             }
-            catch
+            }
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "AuthController Exception");
+            }
+
                 Unauthorized.Inc();
                 return Unauthorized();
             }

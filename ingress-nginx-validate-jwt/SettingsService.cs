@@ -26,7 +26,7 @@ public class SettingsService : ISettingsService
             {
                 var exp = new Exception("Unable to load OpenIdConfiguration");
 
-                _logger.LogError(exp, "Unable to load OpenIdConfiguration");
+                _logger.LogCritical(exp, "Unable to load OpenIdConfiguration");
 
                 throw exp;
             }
