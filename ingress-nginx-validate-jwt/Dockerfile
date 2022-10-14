@@ -8,7 +8,7 @@ RUN dotnet build "ingress-nginx-validate-jwt.csproj" -c Release -o /app/build
 
 FROM build AS publish
 ARG VERSION=0.0.1
-RUN dotnet publish "ingress-nginx-validate-jwt.csproj" -c Release --use-current-runtime --self-contained true -o /app/publish /p:Version=${VERSION} /p:PublishTrimmed=true
+RUN dotnet publish "ingress-nginx-validate-jwt.csproj" -c Release --use-current-runtime --self-contained true -o /app/publish /p:Version=${VERSION} /p:PublishTrimmed=false
 
 FROM mcr.microsoft.com/dotnet/runtime-deps:7.0-alpine AS base
 WORKDIR /app
