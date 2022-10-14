@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Prometheus;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
 
 namespace ingress_nginx_validate_jwt.Controllers;
 
@@ -35,58 +36,45 @@ public class AuthController : ControllerBase
         {
             try
             {
-                var token = Request.Headers.Authorization.FirstOrDefault();
-
-                if (string.IsNullOrEmpty(token))
+                if (AuthenticationHeaderValue.TryParse(Request.Headers.Authorization.FirstOrDefault(), out var header) && header.Scheme == "Bearer")
                 {
-                    Unauthorized.Inc();
-                    return Unauthorized();
-                }
+                    var settings = await _settingsService.GetConfiguration(cancellationToken);
 
-                // Remove "Bearer "
-                if (token.StartsWith("Bearer "))
-                {
-                    token = token.Substring(7);
-                }
-
-                var settings = await _settingsService.GetConfiguration(cancellationToken);
-
-                var parameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKeys = settings.SigningKeys,
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ClockSkew = TimeSpan.FromSeconds(0)
-                };
-
-                _jwtSecurityTokenHandler.ValidateToken(token, parameters, out SecurityToken validatedToken);
-
-                var jwtToken = (JwtSecurityToken)validatedToken;
-
-                foreach (var item in Request.Query)
-                {
-                    var claim = jwtToken.Claims.First(x => x.Type == item.Key).Value;
-
-                    if (!item.Value.Contains(claim))
+                    var parameters = new TokenValidationParameters
                     {
-                        Unauthorized.Inc();
-                        return Unauthorized();
-                    }
-                }
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKeys = settings.SigningKeys,
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ClockSkew = TimeSpan.FromSeconds(0)
+                    };
 
-                Authorized.Inc();
-                return Ok();
-            }
+                    _jwtSecurityTokenHandler.ValidateToken(header.Parameter, parameters, out SecurityToken validatedToken);
+
+                    var jwtToken = (JwtSecurityToken)validatedToken;
+
+                    foreach (var item in Request.Query)
+                    {
+                        var claim = jwtToken.Claims.First(x => x.Type == item.Key).Value;
+
+                        if (!item.Value.Contains(claim))
+                        {
+                            Unauthorized.Inc();
+                            return Unauthorized();
+                        }
+                    }
+
+                    Authorized.Inc();
+                    return Ok();
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "AuthController Exception");
             }
 
-                Unauthorized.Inc();
-                return Unauthorized();
-            }
+            Unauthorized.Inc();
+            return Unauthorized();
         }
     }
 }
