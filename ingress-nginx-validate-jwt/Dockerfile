@@ -14,7 +14,7 @@ FROM mcr.microsoft.com/dotnet/runtime-deps:7.0-alpine AS base
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8443
-ENV ASPNETCORE_URLS=http://+:8080;https://+:8443
+ENV ASPNETCORE_URLS=http://+:8080
 
 RUN addgroup -g 2000 appgroup \
     && adduser -u 1000 -G appgroup -D "appuser"
