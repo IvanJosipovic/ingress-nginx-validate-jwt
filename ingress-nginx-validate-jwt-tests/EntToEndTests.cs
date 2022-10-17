@@ -1,19 +1,9 @@
-﻿using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Containers;
-using FluentAssertions;
-using Microsoft.Identity.Client;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+﻿using Microsoft.Identity.Client;
 using System.Net;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ingress_nginx_validate_jwt_tests
 {
-    public class EndToEnd : IClassFixture<EndToEndBase>
+    public class EntToEndTests : IClassFixture<EndToEndBase>
     {
         [Fact]
         public async Task TestHealth()
