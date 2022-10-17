@@ -24,16 +24,24 @@ public class SettingsService : ISettingsService
 
             if (string.IsNullOrEmpty(configEndpoint))
             {
-                var exp = new Exception("Unable to load OpenIdConfiguration");
+                var exp = "Environment Variable OpenIdProviderConfigurationUrl is null!";
 
-                _logger.LogCritical(exp, "Unable to load OpenIdConfiguration");
+                _logger.LogCritical(exp);
 
-                throw exp;
+                throw new Exception(exp);
             }
 
-            _logger.LogInformation("Loading OpenIdConfiguration from : {config}", configEndpoint);
+            _logger.LogInformation("Loading OpenIdConfiguration from: {config}", configEndpoint);
 
-            openIdConnectConfiguration = await OpenIdConnectConfigurationRetriever.GetAsync(configEndpoint, cancellationToken);
+            try
+            {
+                openIdConnectConfiguration = await OpenIdConnectConfigurationRetriever.GetAsync(configEndpoint, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(ex, "Unable to load OpenIdConfiguration from: {config}", configEndpoint);
+                throw;
+            }
         }
 
         return openIdConnectConfiguration;
