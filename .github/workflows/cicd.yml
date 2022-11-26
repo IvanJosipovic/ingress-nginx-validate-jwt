@@ -66,6 +66,13 @@ jobs:
         docker tag ingress-nginx-validate-jwt ghcr.io/${GITHUB_REPOSITORY,,}/ingress-nginx-validate-jwt:${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) }}
         docker push ghcr.io/${GITHUB_REPOSITORY,,}/ingress-nginx-validate-jwt:${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) }}
 
+    - name: Docker Push Docker Hub
+      if: steps.semantic.outputs.new_release_published == 'true'
+      run: |
+        echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login -u ivanjosipovic --password-stdin
+        docker tag ingress-nginx-validate-jwt ivanjosipovic/ingress-nginx-validate-jwt:${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) }}
+        docker push ivanjosipovic/ingress-nginx-validate-jwt:${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) }}
+
     - name: Semantic Release
       if: steps.semantic.outputs.new_release_published == 'true'
       uses: cycjimmy/semantic-release-action@v2
