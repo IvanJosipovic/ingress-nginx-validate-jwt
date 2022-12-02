@@ -1,6 +1,7 @@
 # ingress-nginx-validate-jwt
 
 [![codecov](https://codecov.io/gh/IvanJosipovic/ingress-nginx-validate-jwt/branch/main/graph/badge.svg?token=hh1FWYrH5r)](https://codecov.io/gh/IvanJosipovic/ingress-nginx-validate-jwt)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/ingress-nginx-validate-jwt)](https://artifacthub.io/packages/search?repo=ingress-nginx-validate-jwt)
 
 ## What is this?
 
