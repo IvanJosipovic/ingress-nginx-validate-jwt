@@ -1,0 +1,5 @@
+# Artifact Hub repository metadata file
+
+repositoryID: ingress-nginx-validate-jwt
+owners:
+  - name: IvanJosipovic
