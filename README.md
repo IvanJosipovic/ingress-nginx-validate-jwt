@@ -64,10 +64,9 @@ The /auth endpoint supports a custom parameter called "inject-claims". The value
 For example, using the following query string /auth?
 tid=11111111-1111-1111-1111-111111111111
 &aud=22222222-2222-2222-2222-222222222222
-&aud=33333333-3333-3333-3333-333333333333
-&inject-claims=tid,aud
+&inject-claims=email
 
-The /auth response will contains headers tid=11111111-1111-1111-1111-111111111111 & aud=22222222-2222-2222-2222-222222222222.
+The /auth response will contains headers email=someuser@domain.com
 
 ## Design
 
