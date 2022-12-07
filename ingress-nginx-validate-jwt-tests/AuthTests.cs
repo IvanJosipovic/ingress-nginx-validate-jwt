@@ -138,12 +138,44 @@ namespace ingress_nginx_validate_jwt_tests
                     },
                     typeof(UnauthorizedResult)
                 },
+
+                new object[]
+                {
+                    "?tid=11111111-1111-1111-1111-111111111111&inject-claims=tid",
+                    new List<Claim>
+                    {
+                        new Claim("tid", "11111111-1111-1111-1111-111111111111")
+                    },
+                    typeof(OkResult),
+                    false,
+                    new Dictionary<string, string>()
+                    {
+                        { "tid", "11111111-1111-1111-1111-111111111111" }
+                    }
+                },
+
+                new object[]
+                {
+                    "?tid=11111111-1111-1111-1111-111111111111&inject-claims=tid,aud",
+                    new List<Claim>
+                    {
+                        new Claim("tid", "11111111-1111-1111-1111-111111111111"),
+                        new Claim("aud", "22222222-2222-2222-2222-222222222222"),
+                    },
+                    typeof(OkResult),
+                    false,
+                    new Dictionary<string, string>()
+                    {
+                        { "tid", "11111111-1111-1111-1111-111111111111" },
+                        { "aud", "22222222-2222-2222-2222-222222222222" },
+                    }
+                },
             };
         }
 
         [Theory]
         [MemberData(nameof(GetTests))]
-        public async Task Test1(string query, List<Claim> claims, Type type, bool nullAuth = false)
+        public async Task Test1(string query, List<Claim> claims, Type type, bool nullAuth = false, Dictionary<string,string> expectedHeaders = null)
         {
             IdentityModelEventSource.ShowPII = true;
 
@@ -176,6 +208,14 @@ namespace ingress_nginx_validate_jwt_tests
             var result = await controller.Get(new CancellationToken());
 
             result.Should().BeOfType(type);
+
+            if (expectedHeaders != null)
+            {
+                foreach (var expectedHeader in expectedHeaders)
+                {
+                    httpContext.Response.Headers[expectedHeader.Key].ToString().Should().Be(expectedHeader.Value);
+                }
+            }
         }
     }
 }
