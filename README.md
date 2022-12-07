@@ -58,6 +58,17 @@ tid=11111111-1111-1111-1111-111111111111
 Along with validating the JWT token, the token must have a claim tid=11111111-1111-1111-1111-111111111111 and one of aud=22222222-2222-2222-2222-222222222222
  or aud=33333333-3333-3333-3333-333333333333
 
+### Inject claims as headers
+The /auth endpoint supports a custom parameter called "inject-claims". The values are comma separated names of claims which will be added to the response headers. These headers can be used with the Ingres Nginx auth_request_set and add_header features.
+
+For example, using the following query string /auth?
+tid=11111111-1111-1111-1111-111111111111
+&aud=22222222-2222-2222-2222-222222222222
+&aud=33333333-3333-3333-3333-333333333333
+&inject-claims=tid,aud
+
+The /auth response will contains headers tid=11111111-1111-1111-1111-111111111111 & aud=22222222-2222-2222-2222-222222222222.
+
 ## Design
 
 ![alt text](/docs/validate-jwt.png)
