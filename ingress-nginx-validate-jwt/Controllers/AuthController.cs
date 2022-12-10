@@ -55,14 +55,27 @@ public class AuthController : ControllerBase
 
                     foreach (var item in Request.Query)
                     {
-
                         if (item.Key.Equals("inject-claims", StringComparison.InvariantCultureIgnoreCase))
                         {
-                            foreach (var claimToInject in item.Value.ToString().Split(','))
+                            foreach (var value in item.Value)
                             {
-                                var claimToInjectValue = jwtToken.Claims.First(x => x.Type == claimToInject).Value;
+                                foreach (var claimToInject in value.Split(','))
+                                {
+                                    var claimToInjectValue = jwtToken.Claims.First(x => x.Type == claimToInject).Value;
 
-                                Response.Headers.Add(claimToInject, claimToInjectValue);
+                                    Response.Headers.Add(claimToInject, claimToInjectValue);
+                                }
+                            }
+                        }
+                        else if (item.Key.Equals("inject-claim", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            foreach (var value in item.Value)
+                            {
+                                var clm = value.Split(',');
+
+                                var claimToInjectValue = jwtToken.Claims.First(x => x.Type == clm[1]).Value;
+
+                                Response.Headers.Add(clm[0], claimToInjectValue);
                             }
                         }
                         else
