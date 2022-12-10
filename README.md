@@ -61,12 +61,24 @@ Along with validating the JWT token, the token must have a claim tid=11111111-11
 ### Inject claims as headers
 The /auth endpoint supports a custom parameter called "inject-claims". The values are comma separated names of claims which will be added to the response headers. These headers can be used with the Ingres Nginx auth_request_set and add_header features.
 
-For example, using the following query string /auth?
-tid=11111111-1111-1111-1111-111111111111
-&aud=22222222-2222-2222-2222-222222222222
+For example, using the following query string
+/auth?  
+tid=11111111-1111-1111-1111-111111111111  
+&aud=22222222-2222-2222-2222-222222222222  
 &inject-claims=email
 
-The /auth response will contains headers email=someuser@domain.com
+The /auth response will contains header email=someuser@domain.com
+
+### Inject claims as headers with custom name
+The /auth endpoint supports a custom parameter called "inject-claim". The value should be in the following format, \{header name\},\{claim name\}".
+
+For example, using the following query string
+/auth?  
+tid=11111111-1111-1111-1111-111111111111  
+&aud=22222222-2222-2222-2222-222222222222  
+&inject-claim=mail,email
+
+The /auth response will contains header mail=someuser@domain.com
 
 ## Design
 

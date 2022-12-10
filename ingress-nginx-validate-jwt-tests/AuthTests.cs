@@ -170,6 +170,39 @@ namespace ingress_nginx_validate_jwt_tests
                         { "aud", "22222222-2222-2222-2222-222222222222" },
                     }
                 },
+
+                new object[]
+                {
+                    "?tid=11111111-1111-1111-1111-111111111111&inject-claim=tenant,tid",
+                    new List<Claim>
+                    {
+                        new Claim("tid", "11111111-1111-1111-1111-111111111111"),
+                        new Claim("aud", "22222222-2222-2222-2222-222222222222"),
+                    },
+                    typeof(OkResult),
+                    false,
+                    new Dictionary<string, string>()
+                    {
+                        { "tenant", "11111111-1111-1111-1111-111111111111" }
+                    }
+                },
+
+                new object[]
+                {
+                    "?tid=11111111-1111-1111-1111-111111111111&inject-claim=tenant,tid&inject-claim=audiance,aud",
+                    new List<Claim>
+                    {
+                        new Claim("tid", "11111111-1111-1111-1111-111111111111"),
+                        new Claim("aud", "22222222-2222-2222-2222-222222222222"),
+                    },
+                    typeof(OkResult),
+                    false,
+                    new Dictionary<string, string>()
+                    {
+                        { "tenant", "11111111-1111-1111-1111-111111111111" },
+                        { "audiance", "22222222-2222-2222-2222-222222222222" },
+                    }
+                },
             };
         }
 
