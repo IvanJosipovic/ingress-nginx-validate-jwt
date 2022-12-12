@@ -55,27 +55,32 @@ public class AuthController : ControllerBase
 
                     foreach (var item in Request.Query)
                     {
-                        if (item.Key.Equals("inject-claims", StringComparison.InvariantCultureIgnoreCase))
+                        if (item.Key.Equals("inject-claim", StringComparison.InvariantCultureIgnoreCase))
                         {
                             foreach (var value in item.Value)
                             {
-                                foreach (var claimToInject in value.Split(','))
+                                string claim;
+                                string headerName;
+
+                                if (value.Contains(','))
                                 {
-                                    var claimToInjectValue = jwtToken.Claims.First(x => x.Type == claimToInject).Value;
-
-                                    Response.Headers.Add(claimToInject, claimToInjectValue);
+                                    claim = value.Split(',')[0];
+                                    headerName = value.Split(',')[1];
                                 }
-                            }
-                        }
-                        else if (item.Key.Equals("inject-claim", StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            foreach (var value in item.Value)
-                            {
-                                var clm = value.Split(',');
+                                else
+                                {
+                                    claim = value;
+                                    headerName = value;
+                                }
 
-                                var claimToInjectValue = jwtToken.Claims.First(x => x.Type == clm[1]).Value;
+                                var claimValue = jwtToken.Claims.FirstOrDefault(x => x.Type == claim);
 
-                                Response.Headers.Add(clm[0], claimToInjectValue);
+                                if (claimValue == null)
+                                {
+                                    continue;
+                                }
+
+                                Response.Headers.Add(headerName, claimValue.Value);
                             }
                         }
                         else
