@@ -138,7 +138,13 @@ namespace ingress_nginx_validate_jwt_tests
                     },
                     typeof(UnauthorizedResult)
                 },
+            };
+        }
 
+        public static IEnumerable<object[]> GetInjectClaimsTests()
+        {
+            return new List<object[]>
+            {
                 new object[]
                 {
                     "?tid=11111111-1111-1111-1111-111111111111&inject-claim=tid",
@@ -227,8 +233,69 @@ namespace ingress_nginx_validate_jwt_tests
             };
         }
 
+        public static IEnumerable<object[]> GetArrayTests()
+        {
+            return new List<object[]>
+            {
+                new object[]
+                {
+                    "?inject-claim=groups",
+                    new List<Claim>
+                    {
+                        new Claim("groups", "foo"),
+                        new Claim("groups", "bar"),
+                        new Claim("groups", "baz"),
+                    },
+                    typeof(OkResult),
+                    false,
+                    new Dictionary<string, string>()
+                    {
+                        { "groups", "[\"foo\",\"bar\",\"baz\"]" }
+                    }
+                },
+
+                new object[]
+                {
+                    "?groups=foo",
+                    new List<Claim>
+                    {
+                        new Claim("groups", "foo"),
+                        new Claim("groups", "bar"),
+                        new Claim("groups", "baz"),
+                    },
+                    typeof(OkResult)
+                },
+
+                new object[]
+                {
+                    "?groups=bar",
+                    new List<Claim>
+                    {
+                        new Claim("groups", "foo"),
+                        new Claim("groups", "bar"),
+                        new Claim("groups", "baz"),
+                    },
+                    typeof(OkResult)
+                },
+
+                new object[]
+                {
+                    "?groups=baz",
+                    new List<Claim>
+                    {
+                        new Claim("groups", "foo"),
+                        new Claim("groups", "bar"),
+                        new Claim("groups", "baz"),
+                    },
+                    typeof(OkResult)
+                },
+            };
+        }
+
         [Theory]
         [MemberData(nameof(GetTests))]
+        [MemberData(nameof(GetInjectClaimsTests))]
+        [MemberData(nameof(GetArrayTests))]
         public async Task Test1(string query, List<Claim> claims, Type type, bool nullAuth = false, Dictionary<string,string> expectedHeaders = null)
         {
             IdentityModelEventSource.ShowPII = true;

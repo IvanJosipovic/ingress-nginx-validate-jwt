@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using Prometheus;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace ingress_nginx_validate_jwt.Controllers;
 
@@ -59,35 +60,40 @@ public class AuthController : ControllerBase
                         {
                             foreach (var value in item.Value)
                             {
-                                string claim;
+                                string claimName;
                                 string headerName;
 
                                 if (value.Contains(','))
                                 {
-                                    claim = value.Split(',')[0];
+                                    claimName = value.Split(',')[0];
                                     headerName = value.Split(',')[1];
                                 }
                                 else
                                 {
-                                    claim = value;
+                                    claimName = value;
                                     headerName = value;
                                 }
 
-                                var claimValue = jwtToken.Claims.FirstOrDefault(x => x.Type == claim);
+                                var claims = jwtToken.Claims.Where(x => x.Type == claimName).ToArray();
 
-                                if (claimValue == null)
+                                if (claims == null || claims.Length == 0)
                                 {
                                     continue;
                                 }
 
-                                Response.Headers.Add(headerName, claimValue.Value);
+                                if (claims.Length == 1)
+                                {
+                                    Response.Headers.Add(headerName, claims[0].Value);
+                                }
+                                else
+                                {
+                                    Response.Headers.Add(headerName, JsonSerializer.Serialize(claims.Select(x => x.Value)));
+                                }
                             }
                         }
                         else
                         {
-                            var claim = jwtToken.Claims.First(x => x.Type == item.Key).Value;
-
-                            if (!item.Value.Contains(claim))
+                            if (!jwtToken.Claims.Any(x => x.Type == item.Key && item.Value.Any(y => y.Equals(x.Value))))
                             {
                                 Unauthorized.Inc();
                                 return Unauthorized();
