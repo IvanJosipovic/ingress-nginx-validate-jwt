@@ -47,7 +47,7 @@ spec:
 
 ## Parameters
 
-The /auth endpoint supports configurable parameters in the format of {claim}={value}. In the case the same claim is called more than once, the traffic will have to match only one.
+The /auth endpoint supports configurable parameters in the format of \{claim\}=\{value\}. In the case the same claim is called more than once, the traffic will have to match only one.
 
 For example, using the following query string
 /auth?  
@@ -55,28 +55,40 @@ tid=11111111-1111-1111-1111-111111111111
 &aud=22222222-2222-2222-2222-222222222222  
 &aud=33333333-3333-3333-3333-333333333333  
 
-Along with validating the JWT token, the token must have a claim tid=11111111-1111-1111-1111-111111111111 and one of aud=22222222-2222-2222-2222-222222222222
- or aud=33333333-3333-3333-3333-333333333333
+Along with validating the JWT token, the token must have a claim tid=11111111-1111-1111-1111-111111111111 and one of aud=22222222-2222-2222-2222-222222222222 or aud=33333333-3333-3333-3333-333333333333
+
+### How to query arrays
+The /auth endpoint is able to query arrays. We'll use the following JWT token in the example.
+```json
+{
+  "email": "johndoe@example.com",
+  "groups": ["admin", "developers"],
+}
+```
+
+Using the following query string we can limit this endpoint to only tokens with an admin group
+/auth?  
+groups=admin
 
 ### Inject claims as headers
-The /auth endpoint supports a custom parameter called "inject-claims". The values are comma separated names of claims which will be added to the response headers. These headers can be used with the Ingres Nginx auth_request_set and add_header features.
+The /auth endpoint supports a custom parameter called "inject-claim". The value is the name of claim which will be added to the response headers. These headers can be used with the Ingres Nginx auth_request_set and add_header features.
 
 For example, using the following query string
 /auth?  
 tid=11111111-1111-1111-1111-111111111111  
 &aud=22222222-2222-2222-2222-222222222222  
-&inject-claims=email
+&inject-claim=email
 
 The /auth response will contains header email=someuser@domain.com
 
 ### Inject claims as headers with custom name
-The /auth endpoint supports a custom parameter called "inject-claim". The value should be in the following format, \{header name\},\{claim name\}".
+The value should be in the following format, "\{claim name\},\{header name\}".
 
 For example, using the following query string
 /auth?  
 tid=11111111-1111-1111-1111-111111111111  
 &aud=22222222-2222-2222-2222-222222222222  
-&inject-claim=mail,email
+&inject-claim=email,mail
 
 The /auth response will contains header mail=someuser@domain.com
 

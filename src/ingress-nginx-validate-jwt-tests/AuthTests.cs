@@ -138,10 +138,16 @@ namespace ingress_nginx_validate_jwt_tests
                     },
                     typeof(UnauthorizedResult)
                 },
+            };
+        }
 
+        public static IEnumerable<object[]> GetInjectClaimsTests()
+        {
+            return new List<object[]>
+            {
                 new object[]
                 {
-                    "?tid=11111111-1111-1111-1111-111111111111&inject-claims=tid",
+                    "?tid=11111111-1111-1111-1111-111111111111&inject-claim=tid",
                     new List<Claim>
                     {
                         new Claim("tid", "11111111-1111-1111-1111-111111111111")
@@ -156,7 +162,7 @@ namespace ingress_nginx_validate_jwt_tests
 
                 new object[]
                 {
-                    "?tid=11111111-1111-1111-1111-111111111111&inject-claims=tid,aud",
+                    "?tid=11111111-1111-1111-1111-111111111111&inject-claim=tid&inject-claim=aud",
                     new List<Claim>
                     {
                         new Claim("tid", "11111111-1111-1111-1111-111111111111"),
@@ -173,7 +179,7 @@ namespace ingress_nginx_validate_jwt_tests
 
                 new object[]
                 {
-                    "?tid=11111111-1111-1111-1111-111111111111&inject-claim=tenant,tid",
+                    "?tid=11111111-1111-1111-1111-111111111111&inject-claim=tid,tenant",
                     new List<Claim>
                     {
                         new Claim("tid", "11111111-1111-1111-1111-111111111111"),
@@ -189,7 +195,7 @@ namespace ingress_nginx_validate_jwt_tests
 
                 new object[]
                 {
-                    "?tid=11111111-1111-1111-1111-111111111111&inject-claim=tenant,tid&inject-claim=audiance,aud",
+                    "?tid=11111111-1111-1111-1111-111111111111&inject-claim=tid,tenant&inject-claim=aud,audiance",
                     new List<Claim>
                     {
                         new Claim("tid", "11111111-1111-1111-1111-111111111111"),
@@ -203,11 +209,93 @@ namespace ingress_nginx_validate_jwt_tests
                         { "audiance", "22222222-2222-2222-2222-222222222222" },
                     }
                 },
+
+                new object[]
+                {
+                    "?tid=11111111-1111-1111-1111-111111111111&inject-claim=group",
+                    new List<Claim>
+                    {
+                        new Claim("tid", "11111111-1111-1111-1111-111111111111")
+                    },
+                    typeof(OkResult)
+                },
+
+                new object[]
+                {
+                    "?tid=11111111-1111-1111-1111-111111111111&inject-claim=group,group",
+                    new List<Claim>
+                    {
+                        new Claim("tid", "11111111-1111-1111-1111-111111111111"),
+                        new Claim("aud", "22222222-2222-2222-2222-222222222222"),
+                    },
+                    typeof(OkResult)
+                },
+            };
+        }
+
+        public static IEnumerable<object[]> GetArrayTests()
+        {
+            return new List<object[]>
+            {
+                new object[]
+                {
+                    "?inject-claim=groups",
+                    new List<Claim>
+                    {
+                        new Claim("groups", "foo"),
+                        new Claim("groups", "bar"),
+                        new Claim("groups", "baz"),
+                    },
+                    typeof(OkResult),
+                    false,
+                    new Dictionary<string, string>()
+                    {
+                        { "groups", "[\"foo\",\"bar\",\"baz\"]" }
+                    }
+                },
+
+                new object[]
+                {
+                    "?groups=foo",
+                    new List<Claim>
+                    {
+                        new Claim("groups", "foo"),
+                        new Claim("groups", "bar"),
+                        new Claim("groups", "baz"),
+                    },
+                    typeof(OkResult)
+                },
+
+                new object[]
+                {
+                    "?groups=bar",
+                    new List<Claim>
+                    {
+                        new Claim("groups", "foo"),
+                        new Claim("groups", "bar"),
+                        new Claim("groups", "baz"),
+                    },
+                    typeof(OkResult)
+                },
+
+                new object[]
+                {
+                    "?groups=baz",
+                    new List<Claim>
+                    {
+                        new Claim("groups", "foo"),
+                        new Claim("groups", "bar"),
+                        new Claim("groups", "baz"),
+                    },
+                    typeof(OkResult)
+                },
             };
         }
 
         [Theory]
         [MemberData(nameof(GetTests))]
+        [MemberData(nameof(GetInjectClaimsTests))]
+        [MemberData(nameof(GetArrayTests))]
         public async Task Test1(string query, List<Claim> claims, Type type, bool nullAuth = false, Dictionary<string,string> expectedHeaders = null)
         {
             IdentityModelEventSource.ShowPII = true;

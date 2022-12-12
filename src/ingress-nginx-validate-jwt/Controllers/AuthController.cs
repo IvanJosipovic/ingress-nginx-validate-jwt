@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using Prometheus;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace ingress_nginx_validate_jwt.Controllers;
 
@@ -55,34 +56,44 @@ public class AuthController : ControllerBase
 
                     foreach (var item in Request.Query)
                     {
-                        if (item.Key.Equals("inject-claims", StringComparison.InvariantCultureIgnoreCase))
+                        if (item.Key.Equals("inject-claim", StringComparison.InvariantCultureIgnoreCase))
                         {
                             foreach (var value in item.Value)
                             {
-                                foreach (var claimToInject in value.Split(','))
+                                string claimName;
+                                string headerName;
+
+                                if (value.Contains(','))
                                 {
-                                    var claimToInjectValue = jwtToken.Claims.First(x => x.Type == claimToInject).Value;
-
-                                    Response.Headers.Add(claimToInject, claimToInjectValue);
+                                    claimName = value.Split(',')[0];
+                                    headerName = value.Split(',')[1];
                                 }
-                            }
-                        }
-                        else if (item.Key.Equals("inject-claim", StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            foreach (var value in item.Value)
-                            {
-                                var clm = value.Split(',');
+                                else
+                                {
+                                    claimName = value;
+                                    headerName = value;
+                                }
 
-                                var claimToInjectValue = jwtToken.Claims.First(x => x.Type == clm[1]).Value;
+                                var claims = jwtToken.Claims.Where(x => x.Type == claimName).ToArray();
 
-                                Response.Headers.Add(clm[0], claimToInjectValue);
+                                if (claims == null || claims.Length == 0)
+                                {
+                                    continue;
+                                }
+
+                                if (claims.Length == 1)
+                                {
+                                    Response.Headers.Add(headerName, claims[0].Value);
+                                }
+                                else
+                                {
+                                    Response.Headers.Add(headerName, JsonSerializer.Serialize(claims.Select(x => x.Value)));
+                                }
                             }
                         }
                         else
                         {
-                            var claim = jwtToken.Claims.First(x => x.Type == item.Key).Value;
-
-                            if (!item.Value.Contains(claim))
+                            if (!jwtToken.Claims.Any(x => x.Type == item.Key && item.Value.Any(y => y.Equals(x.Value))))
                             {
                                 Unauthorized.Inc();
                                 return Unauthorized();
