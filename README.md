@@ -70,7 +70,7 @@ Using the following query string we can limit this endpoint to only tokens with 
 groups=admin
 
 ### Inject claims as headers
-The /auth endpoint supports a custom parameter called "inject-claim". The value is the name of claim which will be added to the response headers. These headers can be used with the Ingres Nginx auth_request_set and add_header features.
+The /auth endpoint supports a custom parameter called "inject-claim". The value is the name of claim which will be added to the response headers.
 
 For example, using the following query string
 /auth?  
@@ -78,7 +78,7 @@ tid=11111111-1111-1111-1111-111111111111
 &aud=22222222-2222-2222-2222-222222222222  
 &inject-claim=email
 
-The /auth response will contains header email=someuser@domain.com
+The /auth response will contain header email=someuser@domain.com
 
 ### Inject claims as headers with custom name
 The value should be in the following format, "\{claim name\},\{header name\}".
@@ -89,7 +89,22 @@ tid=11111111-1111-1111-1111-111111111111
 &aud=22222222-2222-2222-2222-222222222222  
 &inject-claim=email,mail
 
-The /auth response will contains header mail=someuser@domain.com
+The /auth response will contain header mail=someuser@domain.com
+
+Example Ingress
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app
+  annotations:
+    nginx.ingress.kubernetes.io/auth-url: http://ingress-nginx-validate-jwt.ingress-nginx-validate-jwt.svc.cluster.local:8080/auth?aud=11111111-11111-1111111111&inject-claim=https%3A%2F%2Fexample.com%2Fgroups,groups&inject-claim=scope
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      auth_request_set $groups $upstream_http_groups;
+      auth_request_set $scope $upstream_http_scope;
+      proxy_set_header JWT-Claim-Groups $groups;
+      proxy_set_header JWT-Claim-Scope $scope;
+```
 
 ## Design
 
