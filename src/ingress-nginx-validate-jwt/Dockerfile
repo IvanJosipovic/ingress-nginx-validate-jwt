@@ -10,7 +10,7 @@ FROM build AS publish
 ARG VERSION=0.0.1
 RUN dotnet publish "ingress-nginx-validate-jwt.csproj" -c Release --use-current-runtime --self-contained true -o /app/publish /p:Version=${VERSION} /p:PublishTrimmed=false
 
-FROM mcr.microsoft.com/dotnet/runtime-deps:7.0.2-alpine3.17@sha256:308feaf7295424ffd96b3a68e78ff0134247c974b7ad03ddc1e39030a0389ba0 AS base
+FROM mcr.microsoft.com/dotnet/runtime-deps:7.0.3-alpine3.17@sha256:3f411458fe4dcdd7ab83b5b74e6ed1457bc66ce18c14e2cfcb9c0f17e196f2db AS base
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8443
