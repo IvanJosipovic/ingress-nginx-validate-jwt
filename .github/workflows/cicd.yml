@@ -12,27 +12,11 @@ on:
     types: [opened, reopened, synchronize]
 
 jobs:
-  create-release:
-    name: Create Release
+  build-test:
+    name: Build & Test
     runs-on: ubuntu-latest
-    outputs:
-      new_release_published: ${{ steps.semantic.outputs.new_release_published }}
-      new_release_version: ${{ (steps.semantic.outputs.new_release_published && steps.semantic.outputs.new_release_version) || '0.0.1' }}
     steps:
     - uses: actions/checkout@v3
-
-    - name: Configure Git
-      run: |
-        git config user.name "$GITHUB_ACTOR"
-        git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-
-    - name: Semantic Release
-      uses: cycjimmy/semantic-release-action@v3
-      id: semantic
-      with:
-        dry_run: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v3
@@ -44,7 +28,7 @@ jobs:
 
     - name: Docker Build
       working-directory: src
-      run: docker build -t ingress-nginx-validate-jwt -f ./ingress-nginx-validate-jwt/Dockerfile --build-arg VERSION=0.0.1 .
+      run: docker build -t ingress-nginx-validate-jwt -f ./ingress-nginx-validate-jwt/Dockerfile
 
     - name: .NET Test
       run: dotnet test -c Release --collect:"XPlat Code Coverage"
@@ -55,6 +39,24 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         file: coverage.cobertura.xml
+
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: build-test
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Configure Git
+      run: |
+        git config user.name "$GITHUB_ACTOR"
+        git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+    - name: Semantic Release
+      uses: cycjimmy/semantic-release-action@v3
+      id: semantic
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Set up Docker Buildx
       if: steps.semantic.outputs.new_release_published == 'true'
@@ -68,12 +70,6 @@ jobs:
         echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login -u ivanjosipovic --password-stdin
 
         docker buildx build --push --platform linux/amd64,linux/arm64 -t ivanjosipovic/ingress-nginx-validate-jwt:latest -t ivanjosipovic/ingress-nginx-validate-jwt:${{ steps.semantic.outputs.new_release_version }} -t ghcr.io/${GITHUB_REPOSITORY,,}/ingress-nginx-validate-jwt:latest -t ghcr.io/${GITHUB_REPOSITORY,,}/ingress-nginx-validate-jwt:${{ steps.semantic.outputs.new_release_version }} -f ./ingress-nginx-validate-jwt/Dockerfile --build-arg VERSION=${{ steps.semantic.outputs.new_release_version }} .
-
-    - name: Semantic Release
-      if: steps.semantic.outputs.new_release_published == 'true'
-      uses: cycjimmy/semantic-release-action@v3
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Install Helm
       if: steps.semantic.outputs.new_release_published == 'true'
