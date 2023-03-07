@@ -1,5 +1,5 @@
 # ingress-nginx-validate-jwt
- 
+
 [![codecov](https://codecov.io/gh/IvanJosipovic/ingress-nginx-validate-jwt/branch/main/graph/badge.svg?token=hh1FWYrH5r)](https://codecov.io/gh/IvanJosipovic/ingress-nginx-validate-jwt)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/ingress-nginx-validate-jwt)](https://artifacthub.io/packages/helm/ingress-nginx-validate-jwt/ingress-nginx-validate-jwt)
 [![Docker Hub](https://img.shields.io/docker/pulls/ivanjosipovic/ingress-nginx-validate-jwt?label=Docker%20Hub)](https://hub.docker.com/repository/docker/ivanjosipovic/ingress-nginx-validate-jwt)
@@ -108,7 +108,7 @@ metadata:
 
 ## Design
 
-![alt text](/docs/validate-jwt.png)
+![alt text](https://raw.githubusercontent.com/IvanJosipovic/ingress-nginx-validate-jwt/main/docs/validate-jwt.png)
 
 ## Metrics
 
