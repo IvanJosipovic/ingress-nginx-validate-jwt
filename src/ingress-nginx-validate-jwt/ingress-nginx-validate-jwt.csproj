@@ -7,7 +7,6 @@
     <RootNamespace>ingress_nginx_validate_jwt</RootNamespace>
     <UserSecretsId>1c55899c-42df-4a18-815d-93afa873bb49</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <IsTrimmable>true</IsTrimmable>
   </PropertyGroup>
 
   <ItemGroup>
