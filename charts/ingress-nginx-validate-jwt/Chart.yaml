@@ -30,3 +30,7 @@ keywords:
 home: https://github.com/IvanJosipovic/ingress-nginx-validate-jwt
 sources:
   - https://github.com/IvanJosipovic/ingress-nginx-validate-jwt
+
+annotations:
+  artifacthub.io/category: security
+  artifacthub.io/license: MIT
