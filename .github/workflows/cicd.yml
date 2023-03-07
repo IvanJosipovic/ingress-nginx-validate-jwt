@@ -65,16 +65,9 @@ jobs:
       working-directory: src
       run: |
         echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${GITHUB_ACTOR} --password-stdin
-
-        docker buildx build --push --platform linux/amd64,linux/arm64 -t ghcr.io/${GITHUB_REPOSITORY,,}/ingress-nginx-validate-jwt:latest -t ghcr.io/${GITHUB_REPOSITORY,,}/ingress-nginx-validate-jwt:${{ steps.semantic.outputs.new_release_version }} -f ./ingress-nginx-validate-jwt/Dockerfile --build-arg VERSION=${{ steps.semantic.outputs.new_release_version }} .
-
-    - name: Docker Push Docker Hub
-      working-directory: src
-      if: steps.semantic.outputs.new_release_published == 'true'
-      run: |
         echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login -u ivanjosipovic --password-stdin
 
-        docker buildx build --push --platform linux/amd64,linux/arm64 -t ivanjosipovic/ingress-nginx-validate-jwt:latest -t ivanjosipovic/ingress-nginx-validate-jwt:${{ steps.semantic.outputs.new_release_version }} -f ./ingress-nginx-validate-jwt/Dockerfile --build-arg VERSION=${{ steps.semantic.outputs.new_release_version }} .
+        docker buildx build --push --platform linux/amd64,linux/arm64 -t ivanjosipovic/ingress-nginx-validate-jwt:latest -t ivanjosipovic/ingress-nginx-validate-jwt:${{ steps.semantic.outputs.new_release_version }} -t ghcr.io/${GITHUB_REPOSITORY,,}/ingress-nginx-validate-jwt:latest -t ghcr.io/${GITHUB_REPOSITORY,,}/ingress-nginx-validate-jwt:${{ steps.semantic.outputs.new_release_version }} -f ./ingress-nginx-validate-jwt/Dockerfile --build-arg VERSION=${{ steps.semantic.outputs.new_release_version }} .
 
     - name: Semantic Release
       if: steps.semantic.outputs.new_release_published == 'true'
