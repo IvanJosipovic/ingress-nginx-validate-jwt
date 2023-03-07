@@ -11,9 +11,6 @@ on:
   pull_request:
     types: [opened, reopened, synchronize]
 
-env:
-  semantic_version: 19
-
 jobs:
   create-release:
     name: Create Release
@@ -30,10 +27,9 @@ jobs:
         git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
     - name: Semantic Release
-      uses: cycjimmy/semantic-release-action@v2
+      uses: cycjimmy/semantic-release-action@v3
       id: semantic
       with:
-        semantic_version: ${{ env.semantic_version }}
         dry_run: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -82,9 +78,7 @@ jobs:
 
     - name: Semantic Release
       if: steps.semantic.outputs.new_release_published == 'true'
-      uses: cycjimmy/semantic-release-action@v2
-      with:
-        semantic_version: ${{ env.semantic_version }}
+      uses: cycjimmy/semantic-release-action@v3
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
