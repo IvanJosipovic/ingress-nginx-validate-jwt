@@ -1,9 +1,12 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using Prometheus;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using System.Web;
+using ingress_nginx_validate_jwt.Constants;
+using ingress_nginx_validate_jwt.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using Prometheus;
 
 namespace ingress_nginx_validate_jwt.Controllers;
 
@@ -13,13 +16,13 @@ public class AuthController : ControllerBase
 {
     private readonly ILogger<AuthController> _logger;
 
-    private ISettingsService _settingsService;
+    private readonly ISettingsService _settingsService;
 
-    private JwtSecurityTokenHandler _jwtSecurityTokenHandler;
+    private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler;
 
-    private static readonly Gauge Authorized = Metrics.CreateGauge("ingress_nginx_validate_jwt_authorized", "Number of Authorized operations ongoing.");
+    private static readonly Gauge AuthorizedGauge = Metrics.CreateGauge("ingress_nginx_validate_jwt_authorized", "Number of Authorized operations ongoing.");
 
-    private static readonly Gauge Unauthorized = Metrics.CreateGauge("ingress_nginx_validate_jwt_unauthorized", "Number of Unauthorized operations ongoing.");
+    private static readonly Gauge UnauthorizedGauge = Metrics.CreateGauge("ingress_nginx_validate_jwt_unauthorized", "Number of Unauthorized operations ongoing.");
 
     private static readonly Histogram ValidationDuration = Metrics.CreateHistogram("ingress_nginx_validate_jwt_duration_seconds", "Histogram of JWT validation durations.");
 
@@ -37,7 +40,9 @@ public class AuthController : ControllerBase
         {
             try
             {
-                if (AuthenticationHeaderValue.TryParse(Request.Headers.Authorization.FirstOrDefault(), out var header) && header.Scheme == "Bearer")
+                string? token = GetToken();
+
+                if (!string.IsNullOrWhiteSpace(token))
                 {
                     var settings = await _settingsService.GetConfiguration(cancellationToken);
 
@@ -50,7 +55,7 @@ public class AuthController : ControllerBase
                         ClockSkew = TimeSpan.FromSeconds(0)
                     };
 
-                    _jwtSecurityTokenHandler.ValidateToken(header.Parameter, parameters, out SecurityToken validatedToken);
+                    _jwtSecurityTokenHandler.ValidateToken(token, parameters, out SecurityToken validatedToken);
 
                     var jwtToken = (JwtSecurityToken)validatedToken;
 
@@ -95,13 +100,13 @@ public class AuthController : ControllerBase
                         {
                             if (!jwtToken.Claims.Any(x => x.Type == item.Key && item.Value.Any(y => y.Equals(x.Value))))
                             {
-                                Unauthorized.Inc();
+                                UnauthorizedGauge.Inc();
                                 return Unauthorized();
                             }
                         }
                     }
 
-                    Authorized.Inc();
+                    AuthorizedGauge.Inc();
                     return Ok();
                 }
             }
@@ -110,8 +115,26 @@ public class AuthController : ControllerBase
                 _logger.LogError(ex, "AuthController Exception");
             }
 
-            Unauthorized.Inc();
+            UnauthorizedGauge.Inc();
             return Unauthorized();
         }
+    }
+
+    private string? GetToken()
+    {
+        string? token = null;
+        var hasValidAuthorizationHeader = AuthenticationHeaderValue.TryParse(Request.Headers.Authorization.FirstOrDefault(), out var header) && header.Scheme == "Bearer";
+        if (hasValidAuthorizationHeader)
+            token = header?.Parameter;
+
+        var originalUrl = Request.Headers.GetOriginalUrlValue();
+        if (!string.IsNullOrWhiteSpace(originalUrl))
+        {
+            var builder = new UriBuilder(originalUrl);
+            var queryParams = HttpUtility.ParseQueryString(builder.Query);
+            token = queryParams[QueryParameters.AccessToken];
+        }
+
+        return token;
     }
 }
