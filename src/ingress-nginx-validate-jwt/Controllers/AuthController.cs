@@ -40,7 +40,7 @@ public class AuthController : ControllerBase
         {
             try
             {
-                string? token = GetToken();
+                var token = GetToken();
 
                 if (!string.IsNullOrWhiteSpace(token))
                 {
