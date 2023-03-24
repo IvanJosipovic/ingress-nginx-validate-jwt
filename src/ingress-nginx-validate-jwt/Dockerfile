@@ -22,5 +22,10 @@ RUN addgroup -g 2000 appgroup \
 RUN chown appuser:appgroup  /app
 USER appuser:appgroup
 
+RUN apk update && \
+    apk upgrade && \
+    apk clean && \
+    rm -rf /var/cache/apk/*
+
 COPY --from=publish /app/publish .
 ENTRYPOINT ["./ingress-nginx-validate-jwt"]
