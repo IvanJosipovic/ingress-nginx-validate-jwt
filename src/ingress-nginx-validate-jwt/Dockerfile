@@ -18,7 +18,7 @@ ENV ASPNETCORE_URLS=http://+:8080
 
 RUN apk update && \
     apk upgrade && \
-    apk clean && \
+    apk cache clean && \
     rm -rf /var/cache/apk/*
 
 RUN addgroup -g 2000 appgroup \
