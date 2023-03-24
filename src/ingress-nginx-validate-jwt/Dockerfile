@@ -16,6 +16,10 @@ EXPOSE 8080
 EXPOSE 8443
 ENV ASPNETCORE_URLS=http://+:8080
 
+RUN apk update && \
+    apk upgrade && \
+    rm -rf /var/cache/apk/*
+
 RUN addgroup -g 2000 appgroup \
     && adduser -u 1000 -G appgroup -D "appuser"
 
