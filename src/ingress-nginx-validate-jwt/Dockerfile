@@ -16,16 +16,16 @@ EXPOSE 8080
 EXPOSE 8443
 ENV ASPNETCORE_URLS=http://+:8080
 
+RUN apk update && \
+    apk upgrade && \
+    apk clean && \
+    rm -rf /var/cache/apk/*
+
 RUN addgroup -g 2000 appgroup \
     && adduser -u 1000 -G appgroup -D "appuser"
 
 RUN chown appuser:appgroup  /app
 USER appuser:appgroup
-
-RUN apk update && \
-    apk upgrade && \
-    apk clean && \
-    rm -rf /var/cache/apk/*
 
 COPY --from=publish /app/publish .
 ENTRYPOINT ["./ingress-nginx-validate-jwt"]
