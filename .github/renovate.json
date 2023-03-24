@@ -9,9 +9,7 @@
     "suppressNotifications": ["prIgnoreNotification"],
     "rebaseWhen": "conflicted",
     "assignees": ["@ivanjosipovic"],
-    "extends": [
-        "config:base"
-    ],
+    "extends": [":semanticCommitTypeAll(fix)"],
     "platformAutomerge": true,
     "packageRules": [{
             "matchUpdateTypes": ["minor", "patch"],
