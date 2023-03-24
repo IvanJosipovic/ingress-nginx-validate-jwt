@@ -14,7 +14,7 @@
      ["@semantic-release/commit-analyzer", {
       "preset": "angular",
       "releaseRules": [
-        {"type": "chore", "scope": "deps", "release": "fix"},
+        {"type": "chore", "scope": "deps", "release": "fix"}
       ]
     }],
     "@semantic-release/release-notes-generator",
