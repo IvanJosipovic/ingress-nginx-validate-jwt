@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="6.27.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="6.28.0" />
     <PackageReference Include="prometheus-net.AspNetCore" Version="8.0.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.28.0" />
     <PackageReference Include="System.Private.Uri" Version="4.3.2" />
