@@ -28,8 +28,8 @@ jobs:
       run: dotnet build -c Release
 
     - name: Docker Build
-      working-directory: src
-      run: docker build -t ingress-nginx-validate-jwt -f ./ingress-nginx-validate-jwt/Dockerfile .
+      working-directory: src/ingress-nginx-validate-jwt
+      run: docker build -t ingress-nginx-validate-jwt -f Dockerfile .
 
     - name: .NET Test
       run: dotnet test -c Release --collect:"XPlat Code Coverage"
