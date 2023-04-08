@@ -1,6 +1,6 @@
-﻿using DotNet.Testcontainers.Builders;
+﻿using CliWrap;
+using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
-using DotNet.Testcontainers.Images;
 
 namespace ingress_nginx_validate_jwt_tests
 {
@@ -8,20 +8,18 @@ namespace ingress_nginx_validate_jwt_tests
     {
         readonly IContainer container;
 
-        readonly IFutureDockerImage image;
+        readonly string ImageName = $"ingress-nginx-validate-jwt-tests:{Guid.NewGuid()}";
 
         public EndToEndBase()
         {
-            image = new ImageFromDockerfileBuilder()
-                .WithDockerfileDirectory("../../../../ingress-nginx-validate-jwt")
-                .WithName($"ingress-nginx-validate-jwt-tests:{Guid.NewGuid()}")
-                .Build();
-
-            image.CreateAsync().Wait();
+            Cli.Wrap("docker")
+                .WithArguments(new[] { "build", "-t", ImageName, "-f", "Dockerfile", "." })
+                .WithWorkingDirectory("../../../../ingress-nginx-validate-jwt")
+                .ExecuteAsync().GetAwaiter().GetResult();
 
             container = new ContainerBuilder()
               //.WithImage("ingress-nginx-validate-jwt")
-              .WithImage(image.FullName)
+              .WithImage(ImageName)
               .WithEnvironment("OpenIdProviderConfigurationUrl", "https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration")
               .WithPortBinding(8080)
               .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(8080))
@@ -33,7 +31,12 @@ namespace ingress_nginx_validate_jwt_tests
         public void Dispose()
         {
             container.StopAsync().Wait();
-            image.DeleteAsync().Wait();
+
+            Thread.Sleep(TimeSpan.FromSeconds(10));
+
+            Cli.Wrap("docker")
+                .WithArguments(new[] { "image", "rm", ImageName })
+                .ExecuteAsync().GetAwaiter().GetResult();
         }
     }
 }
