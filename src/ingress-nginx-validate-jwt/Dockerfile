@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0.407-alpine3.17@sha256:67b87a054017d5c5de49a127d8206470a40adb0c9fbc099a130c91f76588484c AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0.407-alpine3.17@sha256:f83d8cf9f2b84935b078f0c18a73d8417b4f3fbe278a1a9e8ad7a9bf0c16c5d9 AS build
 WORKDIR /src
 COPY ingress-nginx-validate-jwt.csproj .
 RUN dotnet restore "ingress-nginx-validate-jwt.csproj"
@@ -9,7 +9,7 @@ FROM build AS publish
 ARG VERSION=0.0.1
 RUN dotnet publish "ingress-nginx-validate-jwt.csproj" -c Release --use-current-runtime --self-contained true -o /app/publish /p:Version=${VERSION} /p:PublishTrimmed=false
 
-FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.15-alpine3.17@sha256:390e72a104a47e9137c6c5867dbe849ff9164bc49e3cb56c1bbb55aeca5d6a97 AS base
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.15-alpine3.17@sha256:fa822a9f909e163917767261111bc02159334fd0263304f561f2e1689af3cdf3 AS baseWORKDIR /app
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8443
