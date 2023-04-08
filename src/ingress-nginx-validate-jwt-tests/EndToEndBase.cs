@@ -1,7 +1,5 @@
-﻿using CliWrap;
-using DotNet.Testcontainers.Builders;
+﻿using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
-using System.Text;
 
 namespace ingress_nginx_validate_jwt_tests
 {
