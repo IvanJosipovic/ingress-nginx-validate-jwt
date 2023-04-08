@@ -12,6 +12,12 @@ namespace ingress_nginx_validate_jwt_tests
 
         public EndToEndBase()
         {
+            var files = Directory.GetFiles("../../../../ingress-nginx-validate-jwt");
+
+            foreach (var file in files) {
+                Console.WriteLine(file);
+            }
+
             Cli.Wrap("docker")
                 .WithArguments(new[] { "build", "-t", ImageName, "-f", "Dockerfile", "." })
                 .WithWorkingDirectory("../../../../ingress-nginx-validate-jwt")
