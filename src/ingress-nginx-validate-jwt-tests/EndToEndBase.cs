@@ -10,7 +10,7 @@ namespace ingress_nginx_validate_jwt_tests
         public EndToEndBase()
         {
             var testcontainersBuilder = new TestcontainersBuilder<TestcontainersContainer>()
-              .WithImage("ingress-nginx-validate-jwt")
+              .WithImage("ivanjosipovic/ingress-nginx-validate-jwt")
               .WithName("ingress-nginx-validate-jwt")
               .WithEnvironment("OpenIdProviderConfigurationUrl", "https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration")
               .WithPortBinding(8080)
