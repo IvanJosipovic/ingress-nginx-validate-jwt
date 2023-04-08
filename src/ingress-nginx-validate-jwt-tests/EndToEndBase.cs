@@ -1,6 +1,7 @@
 ﻿using CliWrap;
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
+using System.Text;
 
 namespace ingress_nginx_validate_jwt_tests
 {
@@ -13,11 +14,16 @@ namespace ingress_nginx_validate_jwt_tests
         public EndToEndBase()
         {
             string fullPath = Path.GetFullPath("../../../../ingress-nginx-validate-jwt");
+            var stdErrBuffer = new StringBuilder();
 
-            Cli.Wrap("docker")
+            var result = Cli.Wrap("docker")
                 .WithArguments(new[] { "build", "-t", ImageName, "-f", "Dockerfile", "." })
                 .WithWorkingDirectory(fullPath)
+                .WithStandardErrorPipe(PipeTarget.ToStringBuilder(stdErrBuffer))
+                .WithValidation(CommandResultValidation.None)
                 .ExecuteAsync().GetAwaiter().GetResult();
+
+            Console.WriteLine(stdErrBuffer);
 
             container = new ContainerBuilder()
               //.WithImage("ingress-nginx-validate-jwt")
