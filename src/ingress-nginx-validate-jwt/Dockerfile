@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0.407-alpine3.17@sha256:f83d8cf9f2b84935b078f0c18a73d8417b4f3fbe278a1a9e8ad7a9bf0c16c5d9 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0.408-alpine3.17@sha256:d51a65530e684c2e744e6f3cb06b3d4f6a1358cac2c03605b3df790fa910c18c AS build
 WORKDIR /src
 COPY ingress-nginx-validate-jwt.csproj .
 RUN dotnet restore "ingress-nginx-validate-jwt.csproj"
