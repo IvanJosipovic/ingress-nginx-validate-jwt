@@ -5,6 +5,7 @@ using System.Web;
 using ingress_nginx_validate_jwt.Constants;
 using ingress_nginx_validate_jwt.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using Prometheus;
 
@@ -122,19 +123,17 @@ public class AuthController : ControllerBase
 
     private string? GetToken()
     {
-        string? token = null;
-        var hasValidAuthorizationHeader = AuthenticationHeaderValue.TryParse(Request.Headers.Authorization.FirstOrDefault(), out var header) && header.Scheme == "Bearer";
-        if (hasValidAuthorizationHeader)
-            token = header?.Parameter;
-
-        var originalUrl = Request.Headers.GetOriginalUrlValue();
-        if (!string.IsNullOrWhiteSpace(originalUrl))
+        if (AuthenticationHeaderValue.TryParse(Request.Headers.Authorization.FirstOrDefault(), out var header) && header.Scheme == "Bearer")
         {
-            var builder = new UriBuilder(originalUrl);
+            return header?.Parameter;
+        }
+        else if (Request.Headers.TryGetValue(CustomHeaders.OriginalUrl, out StringValues values))
+        {
+            var builder = new UriBuilder(values[0]);
             var queryParams = HttpUtility.ParseQueryString(builder.Query);
-            token ??= queryParams[QueryParameters.AccessToken];
+            return queryParams[QueryParameters.AccessToken];
         }
 
-        return token;
+        return null;
     }
 }
