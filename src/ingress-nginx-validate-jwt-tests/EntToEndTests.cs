@@ -54,6 +54,25 @@ namespace ingress_nginx_validate_jwt_tests
         }
 
         [Fact]
+        public async Task TestTokenAsAuthorizationHeaderDespiteOriginalUrlHeader()
+        {
+            var bearer = (await GetValidAuthenticationResult()).CreateAuthorizationHeader();
+            var authorizedTid = "b82075ce-f897-4df8-8624-47b71a1fd251";
+            var unauthorizedTid = "1ac63b5f-bf74-46ed-af5f-baee20eefe42";
+
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("Authorization", bearer);
+            var originalUrlBuilder = new UriBuilder("https://www.example.com");
+            client.DefaultRequestHeaders.Add(CustomHeaders.OriginalUrl, originalUrlBuilder.Uri.ToString());
+
+            var tokenresp = await client.GetAsync($"http://localhost:8080/auth?tid={authorizedTid}&aud=api://40f04710-a912-49f4-b865-47ddf5e8046e");
+            tokenresp.IsSuccessStatusCode.Should().BeTrue();
+
+            var tokenresp2 = await client.GetAsync($"http://localhost:8080/auth?tid={unauthorizedTid}&aud=api://40f04710-a912-49f4-b865-47ddf5e8046e");
+            tokenresp2.IsSuccessStatusCode.Should().BeFalse();
+        }
+
+        [Fact]
         public async Task TestInvalidTokenAsAuthorizationHeader()
         {
             var authResult = await GetValidAuthenticationResult();

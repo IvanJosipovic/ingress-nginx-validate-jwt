@@ -132,7 +132,7 @@ public class AuthController : ControllerBase
         {
             var builder = new UriBuilder(originalUrl);
             var queryParams = HttpUtility.ParseQueryString(builder.Query);
-            token = queryParams[QueryParameters.AccessToken];
+            token ??= queryParams[QueryParameters.AccessToken];
         }
 
         return token;
