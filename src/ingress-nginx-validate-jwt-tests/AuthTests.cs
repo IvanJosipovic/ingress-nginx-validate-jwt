@@ -1,4 +1,5 @@
 using ingress_nginx_validate_jwt;
+using ingress_nginx_validate_jwt.Constants;
 using ingress_nginx_validate_jwt.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,9 +33,14 @@ namespace ingress_nginx_validate_jwt_tests
                 SigningCredentials = new SigningCredentials(SecurityKey, SecurityAlgorithms.HmacSha256);
             }
 
+            public static string GenerateBearerJwtToken(IEnumerable<Claim> claims)
+            {
+                return "Bearer " + GenerateJwtToken(claims);
+            }
+
             public static string GenerateJwtToken(IEnumerable<Claim> claims)
             {
-                return "Bearer " + s_tokenHandler.WriteToken(new JwtSecurityToken(Issuer, null, claims, null, DateTime.UtcNow.AddMinutes(20), SigningCredentials));
+                return s_tokenHandler.WriteToken(new JwtSecurityToken(Issuer, null, claims, null, DateTime.UtcNow.AddMinutes(20), SigningCredentials));
             }
         }
 
@@ -292,28 +298,120 @@ namespace ingress_nginx_validate_jwt_tests
             };
         }
 
+        public static IEnumerable<object[]> GetTokenAsQueryParameterTests()
+        {
+            return new List<object[]>
+            {
+                new object[] // Token Only in Query String
+                {
+                    "",
+                    new List<Claim>(),
+                    typeof(OkResult),
+                    true,
+                    null,
+                    new Dictionary<string, string>()
+                    {
+                        {CustomHeaders.OriginalUrl, $"https://www.example.com?{QueryParameters.AccessToken}={MockJwtTokens.GenerateJwtToken(Enumerable.Empty<Claim>())}" }
+                    }
+                },
+                new object[] // Token in Query String and Header, Header is used
+                {
+                    "",
+                    new List<Claim>(),
+                    typeof(OkResult),
+                    false,
+                    null,
+                    new Dictionary<string, string>()
+                    {
+                        {CustomHeaders.OriginalUrl, $"https://www.example.com?{QueryParameters.AccessToken}={MockJwtTokens.GenerateJwtToken(Enumerable.Empty<Claim>())}" }
+                    }
+                },
+                new object[] // Token in Header and Query String with no Token
+                {
+                    "",
+                    new List<Claim>(),
+                    typeof(OkResult),
+                    false,
+                    null,
+                    new Dictionary<string, string>()
+                    {
+                        {CustomHeaders.OriginalUrl, "https://www.example.com" }
+                    }
+                },
+                new object[] // Token in Header Capitalized
+                {
+                    "",
+                    new List<Claim>(),
+                    typeof(OkResult),
+                    true,
+                    null,
+                    new Dictionary<string, string>()
+                    {
+                        {CustomHeaders.OriginalUrl.ToUpper(), $"https://www.example.com?{QueryParameters.AccessToken}={MockJwtTokens.GenerateJwtToken(Enumerable.Empty<Claim>())}" }
+                    }
+                },
+                new object[] // Token in Header with Claim
+                {
+                    "?tid=11111111-1111-1111-1111-111111111111",
+                    new List<Claim>(),
+                    typeof(OkResult),
+                    true,
+                    null,
+                    new Dictionary<string, string>()
+                    {
+                        {CustomHeaders.OriginalUrl, $"https://www.example.com?{QueryParameters.AccessToken}={MockJwtTokens.GenerateJwtToken(new List<Claim>{new Claim("tid", "11111111-1111-1111-1111-111111111111") })}" }
+                    }
+                },
+                new object[] // Token in Header with Bad Claim
+                {
+                    "?tid=11111111-1111-1111-1111-111111111111",
+                    new List<Claim>(),
+                    typeof(UnauthorizedResult),
+                    true,
+                    null,
+                    new Dictionary<string, string>()
+                    {
+                        {CustomHeaders.OriginalUrl, $"https://www.example.com?{QueryParameters.AccessToken}={MockJwtTokens.GenerateJwtToken(new List<Claim>{new Claim("tid", "22222222-2222-2222-2222-222222222222")})}" }
+                    }
+                },
+            };
+        }
+
         [Theory]
         [MemberData(nameof(GetTests))]
         [MemberData(nameof(GetInjectClaimsTests))]
         [MemberData(nameof(GetArrayTests))]
-        public async Task Test1(string query, List<Claim> claims, Type type, bool nullAuth = false, Dictionary<string,string> expectedHeaders = null)
+        [MemberData(nameof(GetTokenAsQueryParameterTests))]
+        public async Task Tests(string query, List<Claim> claims, Type type, bool nullAuth = false, Dictionary<string,string> expectedHeaders = null, Dictionary<string, string> requestHeaders = null)
         {
             IdentityModelEventSource.ShowPII = true;
 
             var settingsService = new Mock<ISettingsService>();
+
             var config = new OpenIdConnectConfiguration()
             {
                 Issuer = MockJwtTokens.Issuer
             };
+
             config.SigningKeys.Add(MockJwtTokens.SecurityKey);
 
             settingsService.Setup(x => x.GetConfiguration(new CancellationToken())).Returns(Task.FromResult(config));
 
             var httpContext = new DefaultHttpContext();
+
             if (!nullAuth)
             {
-                httpContext.Request.Headers.Authorization = MockJwtTokens.GenerateJwtToken(claims);
+                httpContext.Request.Headers.Authorization = MockJwtTokens.GenerateBearerJwtToken(claims);
             }
+
+            if (requestHeaders != null)
+            {
+                foreach (var header in requestHeaders)
+                {
+                    httpContext.Request.Headers.Add(header.Key, header.Value);
+                }
+            }
+
             httpContext.Request.QueryString = new QueryString(query);
 
             var controllerContext = new ControllerContext()
