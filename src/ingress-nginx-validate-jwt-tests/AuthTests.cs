@@ -338,7 +338,7 @@ namespace ingress_nginx_validate_jwt_tests
                         {CustomHeaders.OriginalUrl, "https://www.example.com" }
                     }
                 },
-                new object[] // Token in Header Capitalized
+                new object[] // Token in Query String Capitalized Header
                 {
                     "",
                     new List<Claim>(),
@@ -350,7 +350,7 @@ namespace ingress_nginx_validate_jwt_tests
                         {CustomHeaders.OriginalUrl.ToUpper(), $"https://www.example.com?{QueryParameters.AccessToken}={MockJwtTokens.GenerateJwtToken(Enumerable.Empty<Claim>())}" }
                     }
                 },
-                new object[] // Token in Header with Claim
+                new object[] // Token in Query String with Claim
                 {
                     "?tid=11111111-1111-1111-1111-111111111111",
                     new List<Claim>(),
