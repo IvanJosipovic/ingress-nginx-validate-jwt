@@ -128,8 +128,7 @@ public class AuthController : ControllerBase
         }
         else if (Request.Headers.TryGetValue(CustomHeaders.OriginalUrl, out StringValues values))
         {
-            var builder = new UriBuilder(values[0]);
-            var queryParams = HttpUtility.ParseQueryString(builder.Query);
+            var queryParams = HttpUtility.ParseQueryString(new Uri(values[0]).Query);
             return queryParams[QueryParameters.AccessToken];
         }
 
