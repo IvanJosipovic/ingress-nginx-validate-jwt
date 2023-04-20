@@ -1,4 +1,5 @@
 {
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "enabled": true,
     "timezone": "America/Vancouver",
     "dependencyDashboard": true,
@@ -9,12 +10,22 @@
     "suppressNotifications": ["prIgnoreNotification"],
     "rebaseWhen": "conflicted",
     "assignees": ["@ivanjosipovic"],
-    "extends": [":semanticCommitTypeAll(fix)"],
+    "extends": ["config:base"],
     "platformAutomerge": true,
     "packageRules": [{
             "matchUpdateTypes": ["minor", "patch", "digest"],
             "matchCurrentVersion": "!/^0/",
-            "automerge": true
+            "automerge": true,
+            "extends": [":semanticCommitTypeAll(fix)"],
+            "packageRules": [{
+                    "matchPackagePatterns": [
+                        "Microsoft.IdentityModel.Protocols.OpenIdConnect",
+                        "prometheus-net.AspNetCore",
+                        "System.IdentityModel.Tokens.Jwt",
+                        "System.Private.Uri"
+                    ]
+                }
+            ]
         }, {
             "groupName": "IdentityModel",
             "separateMajorMinor": true,
