@@ -66,7 +66,7 @@ public class AuthController : ControllerBase
                         {
                             foreach (var value in item.Value)
                             {
-                                if (value == null)
+                                if (string.IsNullOrEmpty(value))
                                 {
                                     continue;
                                 }
