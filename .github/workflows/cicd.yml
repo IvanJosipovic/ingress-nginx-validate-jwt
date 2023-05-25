@@ -44,6 +44,16 @@ jobs:
     - name: Benchmark
       working-directory: benchmarks/ingress-nginx-validate-jwt-benchmarks
       run: dotnet run -c Release
+      
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'ingress-nginx-validate-jwt'
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+        severity: 'CRITICAL,HIGH'
 
   create-release:
     if: ${{ github.event_name != 'pull_request' }}
