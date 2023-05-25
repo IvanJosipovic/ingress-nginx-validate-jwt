@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0.408-alpine3.17@sha256:d51a65530e684c2e744e6f3cb06b3d4f6a1358cac2c03605b3df790fa910c18c AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0-cbl-mariner@sha256:eb01915525626d7929b6ab9f76d99d2acd61af74b2c406c7be8a3f891a890771 AS build
 WORKDIR /src
 COPY ingress-nginx-validate-jwt.csproj .
 RUN dotnet restore "ingress-nginx-validate-jwt.csproj"
@@ -9,21 +9,10 @@ FROM build AS publish
 ARG VERSION=0.0.1
 RUN dotnet publish "ingress-nginx-validate-jwt.csproj" -c Release --use-current-runtime --self-contained true -o /app/publish /p:Version=${VERSION} /p:PublishTrimmed=false
 
-FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.16-alpine3.17@sha256:7426564d89e0b3cce8e722af272f46655e0f8370f02d921ea870e956f4874614 AS base
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-cbl-mariner-distroless@sha256:ac0e0d11e8eb95dd77e0d86386c66a2d2be128243625662c379bb0a1e4a03f4e AS base
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 8443
 ENV ASPNETCORE_URLS=http://+:8080
-
-RUN apk update && \
-    apk upgrade && \
-    rm -rf /var/cache/apk/*
-
-RUN addgroup -g 2000 appgroup \
-    && adduser -u 1000 -G appgroup -D "appuser"
-
-RUN chown appuser:appgroup  /app
-USER appuser:appgroup
 
 COPY --from=publish /app/publish .
 ENTRYPOINT ["./ingress-nginx-validate-jwt"]
