@@ -42,7 +42,7 @@ jobs:
         file: coverage.cobertura.xml
 
     - name: Benchmark
-      working-directory: src/ingress-nginx-validate-jwt-benchmarks
+      working-directory: benchmarks/ingress-nginx-validate-jwt-benchmarks
       run: dotnet run -c Release
 
   create-release:
