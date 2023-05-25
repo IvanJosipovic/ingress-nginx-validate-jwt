@@ -1,3 +1,5 @@
+ARG $BUILDPLATFORM=linux/amd64
+
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:7.0-cbl-mariner@sha256:550993fcfd5e1b6854d60d9ec12e0a0960938cd3dc5cb4a1eed9b8d3eee9a059 AS build
 WORKDIR /src
 COPY ingress-nginx-validate-jwt.csproj .
