@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using System.Reflection;
 
 namespace ingress_nginx_validate_jwt.Services;
 
@@ -16,7 +16,8 @@ public class HostedService : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Version: {version}", FileVersionInfo.GetVersionInfo(Process.GetCurrentProcess().MainModule!.FileName!).ProductVersion);
+        var versionAttribute = Assembly.GetEntryAssembly()!.GetCustomAttribute<AssemblyInformationalVersionAttribute>()!.InformationalVersion;
+        _logger.LogInformation("Version: {version}", versionAttribute);
         await _settingsService.GetConfiguration(cancellationToken);
     }
 
