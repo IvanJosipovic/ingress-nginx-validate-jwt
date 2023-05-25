@@ -17,7 +17,7 @@
       "automerge": true,
       "extends": [":semanticCommitTypeAll(fix)"],
       "matchPaths": [
-        "src/*"
+        "src/**"
       ]
     },
     {
@@ -25,8 +25,8 @@
       "matchCurrentVersion": "!/^0/",
       "automerge": true,
       "matchPaths": [
-        "tests/*",
-        "benchmarks/*"
+        "tests/**",
+        "benchmarks/**"
       ]
     },
     {
