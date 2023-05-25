@@ -17,7 +17,7 @@ public class Program
 
         builder.Services.AddSingleton<ISettingsService, SettingsService>();
 
-        builder.Services.AddTransient<JwtSecurityTokenHandler>();
+        builder.Services.AddSingleton<JwtSecurityTokenHandler>();
 
         builder.Services.AddHostedService<HostedService>();
 
