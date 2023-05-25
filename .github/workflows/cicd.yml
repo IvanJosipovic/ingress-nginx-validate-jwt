@@ -29,7 +29,7 @@ jobs:
 
     - name: Docker Build
       working-directory: src/ingress-nginx-validate-jwt
-      run: docker build -t ingress-nginx-validate-jwt -f Dockerfile --build-arg VERSION=0.0.1 .
+      run: docker buildx build --platform linux/amd64,linux/arm64 -t ivanjosipovic/ingress-nginx-validate-jwt .
 
     - name: .NET Test
       run: dotnet test -c Release --collect:"XPlat Code Coverage"
@@ -75,7 +75,7 @@ jobs:
         echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${GITHUB_ACTOR} --password-stdin
         echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login -u ivanjosipovic --password-stdin
 
-        docker buildx build --push --platform linux/amd64,linux/arm64 -t ivanjosipovic/ingress-nginx-validate-jwt:latest -t ivanjosipovic/ingress-nginx-validate-jwt:${{ steps.semantic.outputs.new_release_version }} -t ghcr.io/${GITHUB_REPOSITORY,,}/ingress-nginx-validate-jwt:latest -t ghcr.io/${GITHUB_REPOSITORY,,}/ingress-nginx-validate-jwt:${{ steps.semantic.outputs.new_release_version }} -f Dockerfile --build-arg VERSION=${{ steps.semantic.outputs.new_release_version }} .
+        docker buildx build --push --platform linux/amd64,linux/arm64 -t ivanjosipovic/ingress-nginx-validate-jwt:latest -t ivanjosipovic/ingress-nginx-validate-jwt:${{ steps.semantic.outputs.new_release_version }} -t ghcr.io/${GITHUB_REPOSITORY,,}/ingress-nginx-validate-jwt:latest -t ghcr.io/${GITHUB_REPOSITORY,,}/ingress-nginx-validate-jwt:${{ steps.semantic.outputs.new_release_version }} --build-arg VERSION=${{ steps.semantic.outputs.new_release_version }} .
 
     - name: Install Helm
       if: steps.semantic.outputs.new_release_published == 'true'

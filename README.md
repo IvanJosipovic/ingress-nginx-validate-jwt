@@ -125,6 +125,6 @@ Metrics are exposed on :8080/metrics
 ## Building locally
 ```
 cd src/ingress-nginx-validate-jwt
-docker build -t ingress-nginx-validate-jwt -f Dockerfile --build-arg VERSION=0.0.1 .
+docker build -t ingress-nginx-validate-jwt -f Dockerfile .
 docker run ingress-nginx-validate-jwt -e "OpenIdProviderConfigurationUrl=https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration"
 ```
