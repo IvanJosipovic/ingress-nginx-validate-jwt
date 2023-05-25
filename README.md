@@ -121,3 +121,10 @@ Metrics are exposed on :8080/metrics
 | ingress_nginx_validate_jwt_authorized | Number of Authorized operations ongoing |
 | ingress_nginx_validate_jwt_unauthorized | Number of Unauthorized operations ongoing |
 | ingress_nginx_validate_jwt_duration_seconds | Histogram of JWT validation durations |
+
+## Building locally
+```
+cd src/ingress-nginx-validate-jwt
+docker build -t ingress-nginx-validate-jwt -f Dockerfile .
+docker run ingress-nginx-validate-jwt -e "OpenIdProviderConfigurationUrl=https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration"
+```

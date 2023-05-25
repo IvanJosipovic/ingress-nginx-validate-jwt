@@ -18,7 +18,7 @@ public class SettingServiceTests
         var configRetriever = new Mock<IConfigurationRetriever<OpenIdConnectConfiguration>>();
         configRetriever.Setup(c => c.GetConfigurationAsync(It.IsAny<string>(), It.IsAny<IDocumentRetriever>(), It.IsAny<CancellationToken>())).Verifiable();
 
-        var config = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string>() { { "OpenIdProviderConfigurationUrl", "https://demo" } }).Build();
+        var config = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>() { { "OpenIdProviderConfigurationUrl", "https://demo" } }).Build();
         services.AddSingleton<IConfiguration>(config);
         services.AddLogging();
         services.AddSingleton<ILoggerFactory, NullLoggerFactory>();
@@ -42,7 +42,7 @@ public class SettingServiceTests
         var configRetriever = new Mock<IConfigurationRetriever<OpenIdConnectConfiguration>>();
         configRetriever.Setup(c => c.GetConfigurationAsync(It.IsAny<string>(), It.IsAny<IDocumentRetriever>(), It.IsAny<CancellationToken>())).Verifiable();
 
-        var config = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string>()).Build();
+        var config = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>()).Build();
         services.AddSingleton<IConfiguration>(config);
         services.AddLogging();
         services.AddSingleton<ILoggerFactory, NullLoggerFactory>();
@@ -66,7 +66,7 @@ public class SettingServiceTests
         var configRetriever = new Mock<IConfigurationRetriever<OpenIdConnectConfiguration>>();
         configRetriever.Setup(c => c.GetConfigurationAsync(It.IsAny<string>(), It.IsAny<IDocumentRetriever>(), It.IsAny<CancellationToken>())).Throws<Exception>();
 
-        var config = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string>() { { "OpenIdProviderConfigurationUrl", "https://demo" } }).Build();
+        var config = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>() { { "OpenIdProviderConfigurationUrl", "https://demo" } }).Build();
         services.AddSingleton<IConfiguration>(config);
         services.AddLogging();
         services.AddSingleton<ILoggerFactory, NullLoggerFactory>();

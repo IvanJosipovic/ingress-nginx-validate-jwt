@@ -66,6 +66,11 @@ public class AuthController : ControllerBase
                         {
                             foreach (var value in item.Value)
                             {
+                                if (string.IsNullOrEmpty(value))
+                                {
+                                    continue;
+                                }
+
                                 string claimName;
                                 string headerName;
 
@@ -97,13 +102,10 @@ public class AuthController : ControllerBase
                                 }
                             }
                         }
-                        else
+                        else if (!jwtToken.Claims.Any(x => x.Type == item.Key && item.Value.Any(y => y?.Equals(x.Value) == true)))
                         {
-                            if (!jwtToken.Claims.Any(x => x.Type == item.Key && item.Value.Any(y => y.Equals(x.Value))))
-                            {
-                                UnauthorizedGauge.Inc();
-                                return Unauthorized();
-                            }
+                            UnauthorizedGauge.Inc();
+                            return Unauthorized();
                         }
                     }
 
@@ -127,9 +129,9 @@ public class AuthController : ControllerBase
         {
             return header?.Parameter;
         }
-        else if (Request.Headers.TryGetValue(CustomHeaders.OriginalUrl, out StringValues values))
+        else if (Request.Headers.TryGetValue(CustomHeaders.OriginalUrl, out StringValues values) && values[0] != null)
         {
-            var queryParams = HttpUtility.ParseQueryString(new Uri(values[0]).Query);
+            var queryParams = HttpUtility.ParseQueryString(new Uri(values[0]!).Query);
             return queryParams[QueryParameters.AccessToken];
         }
 

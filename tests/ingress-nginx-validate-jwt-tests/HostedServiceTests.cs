@@ -26,7 +26,7 @@ public class HostedServiceTests
 
         var service = serviceProvider.GetService<IHostedService>() as HostedService;
 
-        await service.StartAsync(CancellationToken.None);
+        await service!.StartAsync(CancellationToken.None);
 
         await service.StopAsync(CancellationToken.None);
 
