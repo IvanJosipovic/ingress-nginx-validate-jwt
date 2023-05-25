@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Protocols;
 
 namespace ingress_nginx_validate_jwt_tests;
 
-public class SettingServiceTest
+public class SettingServiceTests
 {
     [Fact]
     public async Task Test()
