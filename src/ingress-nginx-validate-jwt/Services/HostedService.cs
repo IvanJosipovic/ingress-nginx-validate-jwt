@@ -16,7 +16,7 @@ public class HostedService : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Version: {version}", FileVersionInfo.GetVersionInfo(Process.GetCurrentProcess().MainModule.FileName).ProductVersion);
+        _logger.LogInformation("Version: {version}", FileVersionInfo.GetVersionInfo(Process.GetCurrentProcess().MainModule!.FileName!).ProductVersion);
         await _settingsService.GetConfiguration(cancellationToken);
     }
 
