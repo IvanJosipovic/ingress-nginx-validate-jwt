@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -393,5 +394,41 @@ public class AuthTests
                 httpContext.Response.Headers[expectedHeader.Key].ToString().Should().Be(expectedHeader.Value);
             }
         }
+    }
+
+    [Fact]
+    public async Task TestFailure()
+    {
+        IdentityModelEventSource.ShowPII = true;
+
+        var settingsService = new FakeSettingsService();
+
+        var httpContext = new DefaultHttpContext();
+
+        httpContext.Request.Headers.Authorization = FakeJwtIssuer.GenerateBearerJwtToken(new List<Claim>
+            {
+                new Claim("tid", "11111111-1111-1111-1111-111111111111")
+            }
+        );
+
+        httpContext.Request.QueryString = new QueryString("?tid=11111111-1111-1111-1111-111111111111");
+
+        var controllerContext = new ControllerContext()
+        {
+            HttpContext = httpContext,
+        };
+
+        var mockHandler = new Mock<JwtSecurityTokenHandler>();
+        SecurityToken token;
+        mockHandler.Setup(c => c.ValidateToken(It.IsAny<string>(), It.IsAny<TokenValidationParameters>(), out token)).Throws<Exception>();
+
+        var controller = new AuthController(new Mock<ILogger<AuthController>>().Object, settingsService, mockHandler.Object)
+        {
+            ControllerContext = controllerContext,
+        };
+
+        var result = await controller.Get(new CancellationToken());
+
+        result.Should().BeOfType<UnauthorizedResult>();
     }
 }
