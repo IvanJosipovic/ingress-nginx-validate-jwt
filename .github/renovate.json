@@ -17,7 +17,7 @@
       "automerge": true,
       "extends": [":semanticCommitTypeAll(fix)"],
       "matchPaths": [
-        "src/ingress-nginx-validate-jwt/*"
+        "src/*"
       ]
     },
     {
@@ -25,7 +25,8 @@
       "matchCurrentVersion": "!/^0/",
       "automerge": true,
       "matchPaths": [
-        "src/ingress-nginx-validate-jwt-tests/*"
+        "tests/*",
+        "benchmarks/*"
       ]
     },
     {
