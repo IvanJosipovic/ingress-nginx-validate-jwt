@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\ingress-nginx-validate-jwt-tests\ingress-nginx-validate-jwt-tests.csproj" />
-    <ProjectReference Include="..\src\ingress-nginx-validate-jwt\ingress-nginx-validate-jwt.csproj" />
+    <ProjectReference Include="..\..\src\ingress-nginx-validate-jwt\ingress-nginx-validate-jwt.csproj" />
+    <ProjectReference Include="..\..\tests\ingress-nginx-validate-jwt-tests\ingress-nginx-validate-jwt-tests.csproj" />
   </ItemGroup>
 
 </Project>
