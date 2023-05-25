@@ -17,7 +17,8 @@
       "automerge": true,
       "extends": [":semanticCommitTypeAll(fix)"],
       "matchPaths": [
-        "src/**"
+        "src/**",
+        "global.json"
       ]
     },
     {
