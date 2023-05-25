@@ -30,9 +30,13 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
-    - name: Docker Build
+    - name: Docker Buildx
       working-directory: src/ingress-nginx-validate-jwt
       run: docker buildx build --platform linux/amd64,linux/arm64 -t ingress-nginx-validate-jwt .
+
+    - name: Docker Build
+      working-directory: src/ingress-nginx-validate-jwt
+      run: docker build -t ingress-nginx-validate-jwt .
 
     - name: .NET Test
       run: dotnet test -c Release --collect:"XPlat Code Coverage"
