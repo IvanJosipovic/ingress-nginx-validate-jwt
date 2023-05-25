@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ingress-nginx-validate-jwt\ingress-nginx-validate-jwt.csproj" />
+    <ProjectReference Include="..\..\src\ingress-nginx-validate-jwt\ingress-nginx-validate-jwt.csproj" />
   </ItemGroup>
 
 </Project>

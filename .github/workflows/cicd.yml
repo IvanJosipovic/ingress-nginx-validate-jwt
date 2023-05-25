@@ -41,6 +41,10 @@ jobs:
       with:
         file: coverage.cobertura.xml
 
+    - name: Benchmark
+      working-directory: benchmarks/ingress-nginx-validate-jwt-benchmarks
+      run: dotnet run -c Release
+
   create-release:
     if: ${{ github.event_name != 'pull_request' }}
     name: Create Release

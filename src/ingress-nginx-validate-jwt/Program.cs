@@ -1,3 +1,6 @@
+using ingress_nginx_validate_jwt.Services;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.IdentityModel.Protocols;
 using Prometheus;
 using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
@@ -17,9 +20,13 @@ public class Program
 
         builder.Services.AddSingleton<ISettingsService, SettingsService>();
 
-        builder.Services.AddTransient<JwtSecurityTokenHandler>();
+        builder.Services.AddSingleton<JwtSecurityTokenHandler>();
+
+        builder.Services.AddSingleton<IConfigurationRetriever<OpenIdConnectConfiguration>, OpenIdConnectConfigurationRetriever>();
 
         builder.Services.AddHostedService<HostedService>();
+
+        builder.Services.AddHealthChecks();
 
         var app = builder.Build();
 
@@ -30,6 +37,8 @@ public class Program
         app.MapControllers();
 
         app.UseMetricServer();
+
+        app.MapHealthChecks("/health");
 
         app.Run();
     }
