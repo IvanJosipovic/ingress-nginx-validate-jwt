@@ -43,8 +43,11 @@ public class SettingsService : ISettingsService
             }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex, "Unable to load OpenIdConfiguration from: {config}", configEndpoint);
-                throw;
+                string exp = $"Unable to load OpenIdConfiguration from: {configEndpoint}";
+
+                _logger.LogCritical(ex, exp);
+
+                throw new Exception(exp);
             }
         }
 
