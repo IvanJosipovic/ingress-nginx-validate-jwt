@@ -1,19 +1,23 @@
-﻿using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+﻿using Microsoft.IdentityModel.Protocols;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
-namespace ingress_nginx_validate_jwt;
+namespace ingress_nginx_validate_jwt.Services;
 
 public class SettingsService : ISettingsService
 {
-    private ILogger<SettingsService> _logger;
+    private readonly ILogger<SettingsService> _logger;
 
-    private IConfiguration _configuration;
+    private readonly IConfiguration _configuration;
+
+    private readonly IConfigurationRetriever<OpenIdConnectConfiguration> configurationRetriever;
 
     private OpenIdConnectConfiguration? openIdConnectConfiguration;
 
-    public SettingsService(ILogger<SettingsService> logger, IConfiguration configuration)
+    public SettingsService(ILogger<SettingsService> logger, IConfiguration configuration, IConfigurationRetriever<OpenIdConnectConfiguration> configurationRetriever)
     {
         _logger = logger;
         _configuration = configuration;
+        this.configurationRetriever = configurationRetriever;
     }
 
     public async Task<OpenIdConnectConfiguration> GetConfiguration(CancellationToken cancellationToken = new CancellationToken())
@@ -24,7 +28,7 @@ public class SettingsService : ISettingsService
 
             if (string.IsNullOrEmpty(configEndpoint))
             {
-                var exp = "Environment Variable OpenIdProviderConfigurationUrl is null!";
+                const string exp = "Environment Variable OpenIdProviderConfigurationUrl is null!";
 
                 _logger.LogCritical(exp);
 
@@ -35,7 +39,7 @@ public class SettingsService : ISettingsService
 
             try
             {
-                openIdConnectConfiguration = await OpenIdConnectConfigurationRetriever.GetAsync(configEndpoint, cancellationToken);
+                openIdConnectConfiguration = await configurationRetriever.GetConfigurationAsync(configEndpoint, new HttpDocumentRetriever(), cancellationToken);
             }
             catch (Exception ex)
             {

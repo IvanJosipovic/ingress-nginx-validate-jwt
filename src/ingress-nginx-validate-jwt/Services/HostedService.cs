@@ -1,12 +1,12 @@
 ﻿using System.Diagnostics;
 
-namespace ingress_nginx_validate_jwt;
+namespace ingress_nginx_validate_jwt.Services;
 
 public class HostedService : IHostedService
 {
-    private ILogger<HostedService> _logger;
+    private readonly ILogger<HostedService> _logger;
 
-    private ISettingsService _settingsService;
+    private readonly ISettingsService _settingsService;
 
     public HostedService(ILogger<HostedService> logger, ISettingsService settingsService)
     {
@@ -17,7 +17,6 @@ public class HostedService : IHostedService
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         _logger.LogInformation("Version: {version}", FileVersionInfo.GetVersionInfo(GetType().Assembly.Location).ProductVersion);
-        _logger.LogInformation("Preloading Configuration");
         await _settingsService.GetConfiguration(cancellationToken);
     }
 
