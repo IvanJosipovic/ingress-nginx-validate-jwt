@@ -56,12 +56,11 @@ jobs:
       uses: aquasecurity/trivy-action@master
       with:
         image-ref: 'ingress-nginx-validate-jwt'
-        format: 'github'
+        format: 'table'
         exit-code: '1'
         ignore-unfixed: true
         vuln-type: 'os,library'
         severity: 'CRITICAL,HIGH'
-        github-pat: ${{ secrets.GITHUB_TOKEN }}
 
   create-release:
     if: ${{ github.event_name != 'pull_request' }}
