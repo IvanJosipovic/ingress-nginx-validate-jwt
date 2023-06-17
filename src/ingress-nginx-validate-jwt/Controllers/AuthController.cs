@@ -98,7 +98,7 @@ public class AuthController : ControllerBase
                                 }
                                 else
                                 {
-                                    Response.Headers.Add(headerName, JsonSerializer.Serialize(claims.Select(x => x.Value)));
+                                    Response.Headers.Add(headerName, new StringValues(claims.Select(x => x.Value).ToArray()));
                                 }
                             }
                         }

@@ -128,9 +128,9 @@ public class AuthTests
                 },
                 typeof(OkResult),
                 false,
-                new Dictionary<string, string>()
+                new List<KeyValuePair<string, string>>()
                 {
-                    { "tid", "11111111-1111-1111-1111-111111111111" }
+                    { new KeyValuePair < string, string >("tid", "11111111-1111-1111-1111-111111111111") }
                 }
             },
 
@@ -144,10 +144,10 @@ public class AuthTests
                 },
                 typeof(OkResult),
                 false,
-                new Dictionary<string, string>()
+                new List<KeyValuePair<string, string>>()
                 {
-                    { "tid", "11111111-1111-1111-1111-111111111111" },
-                    { "aud", "22222222-2222-2222-2222-222222222222" },
+                    { new KeyValuePair < string, string >("tid", "11111111-1111-1111-1111-111111111111") },
+                    { new KeyValuePair < string, string >("aud", "22222222-2222-2222-2222-222222222222") },
                 }
             },
 
@@ -161,9 +161,9 @@ public class AuthTests
                 },
                 typeof(OkResult),
                 false,
-                new Dictionary<string, string>()
+                new List<KeyValuePair<string, string>>()
                 {
-                    { "tenant", "11111111-1111-1111-1111-111111111111" }
+                    { new KeyValuePair < string, string >("tenant", "11111111-1111-1111-1111-111111111111") }
                 }
             },
 
@@ -177,10 +177,10 @@ public class AuthTests
                 },
                 typeof(OkResult),
                 false,
-                new Dictionary<string, string>()
+                new List<KeyValuePair<string, string>>()
                 {
-                    { "tenant", "11111111-1111-1111-1111-111111111111" },
-                    { "audiance", "22222222-2222-2222-2222-222222222222" },
+                    { new KeyValuePair<string, string>("tenant", "11111111-1111-1111-1111-111111111111" ) },
+                    { new KeyValuePair<string, string>("audiance", "22222222-2222-2222-2222-222222222222") },
                 }
             },
 
@@ -222,9 +222,11 @@ public class AuthTests
                 },
                 typeof(OkResult),
                 false,
-                new Dictionary<string, string>()
+                new List<KeyValuePair<string, string>>()
                 {
-                    { "groups", "[\"foo\",\"bar\",\"baz\"]" }
+                    { new KeyValuePair <string, string>("groups", "foo") },
+                    { new KeyValuePair <string, string>("groups", "bar") },
+                    { new KeyValuePair <string, string>("groups", "baz") },
                 }
             },
 
@@ -262,6 +264,17 @@ public class AuthTests
                     new Claim("groups", "baz"),
                 },
                 typeof(OkResult)
+            },
+
+            new object[]
+            {
+                "?groups=baz",
+                new List<Claim>
+                {
+                    new Claim("groups", "foo"),
+                    new Claim("groups", "bar"),
+                },
+                typeof(UnauthorizedResult)
             },
         };
     }
@@ -350,7 +363,7 @@ public class AuthTests
     [MemberData(nameof(GetInjectClaimsTests))]
     [MemberData(nameof(GetArrayTests))]
     [MemberData(nameof(GetTokenAsQueryParameterTests))]
-    public async Task Tests(string query, List<Claim> claims, Type type, bool nullAuth = false, Dictionary<string,string>? expectedHeaders = null, Dictionary<string, string>? requestHeaders = null)
+    public async Task Tests(string query, List<Claim> claims, Type type, bool nullAuth = false, List<KeyValuePair<string,string?>> expectedHeaders = null, Dictionary<string, string>? requestHeaders = null)
     {
         IdentityModelEventSource.ShowPII = true;
 
@@ -391,7 +404,8 @@ public class AuthTests
         {
             foreach (var expectedHeader in expectedHeaders)
             {
-                httpContext.Response.Headers[expectedHeader.Key].ToString().Should().Be(expectedHeader.Value);
+                var found = httpContext.Response.Headers.Where(x => x.Key == expectedHeader.Key).SelectMany(x => x.Value).Any(x => x == expectedHeader.Value);
+                found.Should().BeTrue();
             }
         }
     }
