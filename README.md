@@ -100,12 +100,8 @@ kind: Ingress
 metadata:
   name: app
   annotations:
-    nginx.ingress.kubernetes.io/auth-url: http://ingress-nginx-validate-jwt.ingress-nginx-validate-jwt.svc.cluster.local:8080/auth?aud=11111111-11111-1111111111&inject-claim=https%3A%2F%2Fexample.com%2Fgroups,groups&inject-claim=scope
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      auth_request_set $groups $upstream_http_groups;
-      auth_request_set $scope $upstream_http_scope;
-      proxy_set_header JWT-Claim-Groups $groups;
-      proxy_set_header JWT-Claim-Scope $scope;
+    nginx.ingress.kubernetes.io/auth-url: http://ingress-nginx-validate-jwt.ingress-nginx-validate-jwt.svc.cluster.local:8080/auth?aud=11111111-11111-1111111111&inject-claim=groups,JWT-Claim-Groups&inject-claim=scope,JWT-Claim-Scope
+    nginx.ingress.kubernetes.io/auth-response-headers: JWT-Claim-Groups, JWT-Claim-Scope
 ```
 
 ## Design
