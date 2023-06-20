@@ -5,6 +5,9 @@
 [![Docker Hub](https://img.shields.io/docker/pulls/ivanjosipovic/ingress-nginx-validate-jwt?label=Docker%20Hub)](https://hub.docker.com/r/ivanjosipovic/ingress-nginx-validate-jwt)
 [![GitHub](https://img.shields.io/github/stars/ivanjosipovic/ingress-nginx-validate-jwt?style=social)](https://github.com/IvanJosipovic/ingress-nginx-validate-jwt)
 
+| :exclamation:  Check out my new project [OIDC-Guard](https://github.com/IvanJosipovic/OIDC-Guard), which supports JWT and Cookie Authentication! |
+|-----------------------------------------|
+
 ## What is this?
 
 This project is an API server which is used along with the [nginx.ingress.kubernetes.io/auth-url](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md#external-authentication) annotation for ingress-nginx and enables per Ingress customizable JWT validation.
