@@ -20,7 +20,7 @@
       "matchCurrentVersion": "!/^0/",
       "automerge": true,
       "extends": [":semanticCommitTypeAll(fix)"],
-      "matchPaths": [
+      "matchFileNames": [
         "src/**",
         "global.json"
       ]
@@ -29,7 +29,7 @@
       "matchUpdateTypes": ["minor", "patch", "digest"],
       "matchCurrentVersion": "!/^0/",
       "automerge": true,
-      "matchPaths": [
+      "matchFileNames": [
         "tests/**",
         "benchmarks/**"
       ]
