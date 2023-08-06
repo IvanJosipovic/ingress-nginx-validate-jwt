@@ -98,7 +98,7 @@ public class AuthController : ControllerBase
                                 }
                                 else
                                 {
-                                    Response.Headers.Add(headerName, new StringValues(claims.Select(x => x.Value).ToArray()));
+                                    Response.Headers.Add(headerName, claims.Select(x => x.Value).Aggregate((x, y) => x + ", " + y));
                                 }
                             }
                         }
