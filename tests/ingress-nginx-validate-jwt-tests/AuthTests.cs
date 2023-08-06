@@ -224,9 +224,7 @@ public class AuthTests
                 false,
                 new List<KeyValuePair<string, string>>()
                 {
-                    { new KeyValuePair <string, string>("groups", "foo") },
-                    { new KeyValuePair <string, string>("groups", "bar") },
-                    { new KeyValuePair <string, string>("groups", "baz") },
+                    { new KeyValuePair <string, string>("groups", "foo, bar, baz") }
                 }
             },
 
