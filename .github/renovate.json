@@ -14,7 +14,6 @@
     "**/docs/**",
     "**/charts/**"
   ],
-  "schedule": ["before 4am"],
   "packageRules": [
     {
       "matchUpdateTypes": ["minor", "patch", "digest"],
