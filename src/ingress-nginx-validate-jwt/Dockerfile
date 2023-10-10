@@ -1,6 +1,6 @@
 ARG BUILDPLATFORM=linux/amd64
 
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:7.0-alpine@sha256:941e667376fc005ee30c79542086a61aa336d2e3aadd97af8d05816c0218601b AS build
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:7.0-alpine@sha256:38f4916cfd8902b3c703f03aac547790621c0adc474f4cc46e21461653d94774 AS build
 WORKDIR /src
 COPY ingress-nginx-validate-jwt.csproj .
 RUN dotnet restore "ingress-nginx-validate-jwt.csproj"
@@ -11,7 +11,7 @@ FROM build AS publish
 ARG VERSION=0.0.1
 RUN dotnet publish "ingress-nginx-validate-jwt.csproj" -c Release --use-current-runtime -o /app/publish /p:Version=${VERSION}
 
-FROM mcr.microsoft.com/dotnet/runtime-deps:7.0-alpine@sha256:1a89de3c5d6b04f45408bf853a8c24f0f467fd41f26219faeda8dbf9a755f8d5 AS base
+FROM mcr.microsoft.com/dotnet/runtime-deps:7.0-alpine@sha256:201d5aa0b8659de4693fe1b75fa69f6137490719dae77bdfcc4c589e10c62305 AS base
 WORKDIR /app
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://+:8080
