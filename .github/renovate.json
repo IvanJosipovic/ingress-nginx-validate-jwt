@@ -3,12 +3,9 @@
   "enabled": true,
   "timezone": "America/Vancouver",
   "dependencyDashboard": true,
-  "dependencyDashboardTitle": "Renovate Dashboard",
   "semanticCommits": "enabled",
-  "suppressNotifications": ["prIgnoreNotification"],
-  "rebaseWhen": "conflicted",
   "assignees": ["@ivanjosipovic"],
-  "extends": ["config:base"],
+  "extends": [ "config:recommended" ],
   "platformAutomerge": true,
   "ignorePaths": [
     "**/docs/**",
@@ -17,7 +14,6 @@
   "packageRules": [
     {
       "matchUpdateTypes": ["minor", "patch", "digest"],
-      "matchCurrentVersion": "!/^0/",
       "automerge": false,
       "semanticCommitType": "fix",
       "matchFileNames": [
@@ -26,7 +22,6 @@
     },
     {
       "matchUpdateTypes": ["minor", "patch", "digest"],
-      "matchCurrentVersion": "!/^0/",
       "automerge": false,
       "matchFileNames": [
         "tests/**",
