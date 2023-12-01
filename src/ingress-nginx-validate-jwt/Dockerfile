@@ -1,6 +1,6 @@
 ARG BUILDPLATFORM=linux/amd64
 
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0-alpine@sha256:0654dd034eecddddfae0cb136bdcdc26c6f6962edeb3b9b05bace06da4d82e2a AS build
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0-alpine@sha256:11119edddc138c08aa0a5229a4b4fd74ac9fbdcda1c9a655afabe65bc80d9aed AS build
 WORKDIR /src
 COPY ingress-nginx-validate-jwt.csproj .
 RUN dotnet restore "ingress-nginx-validate-jwt.csproj"
