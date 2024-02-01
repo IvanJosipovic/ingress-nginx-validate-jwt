@@ -44,7 +44,7 @@ jobs:
         TESTCLIENTSECRET: ${{ secrets.TESTCLIENTSECRET }}
 
     - name: Coverage
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         file: coverage.cobertura.xml
 
