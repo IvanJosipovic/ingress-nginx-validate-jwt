@@ -42,6 +42,15 @@
           ]
         }
       ]
+    },
+    {
+      "matchUpdateTypes": ["major", "minor", "patch", "digest"],
+      "automerge": true,
+      "packageRules": [
+        {
+          "matchPackageNames": ["alpine_3_18/ca-certificates-bundle"],
+        }
+      ]
     }
   ],
   "customManagers": [
