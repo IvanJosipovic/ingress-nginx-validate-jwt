@@ -5,6 +5,26 @@ entries:
       artifacthub.io/category: security
       artifacthub.io/license: MIT
     apiVersion: v2
+    appVersion: 1.13.64
+    created: "2024-07-10T07:57:15.46734522Z"
+    description: Enables ingress-nginx to validate JWT tokens
+    digest: 3db603179644701148f3de23350ce41aef0941508965a796d98b7d4d56d70599
+    home: https://github.com/IvanJosipovic/ingress-nginx-validate-jwt
+    keywords:
+    - ingress
+    - nginx
+    - jwt
+    name: ingress-nginx-validate-jwt
+    sources:
+    - https://github.com/IvanJosipovic/ingress-nginx-validate-jwt
+    type: application
+    urls:
+    - https://github.com/IvanJosipovic/ingress-nginx-validate-jwt/releases/download/ingress-nginx-validate-jwt-1.13.64/ingress-nginx-validate-jwt-1.13.64.tgz
+    version: 1.13.64
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/license: MIT
+    apiVersion: v2
     appVersion: 1.13.63
     created: "2024-07-09T22:43:50.270800144Z"
     description: Enables ingress-nginx to validate JWT tokens
@@ -1854,4 +1874,4 @@ entries:
     urls:
     - https://github.com/IvanJosipovic/ingress-nginx-validate-jwt/releases/download/ingress-nginx-validate-jwt-1.0.0/ingress-nginx-validate-jwt-1.0.0.tgz
     version: 1.0.0
-generated: "2024-07-09T22:43:50.271074637Z"
+generated: "2024-07-10T07:57:15.467739981Z"
