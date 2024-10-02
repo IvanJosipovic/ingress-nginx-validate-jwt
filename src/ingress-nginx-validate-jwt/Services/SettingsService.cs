@@ -39,7 +39,20 @@ public class SettingsService : ISettingsService
 
             try
             {
-                openIdConnectConfiguration = await configurationRetriever.GetConfigurationAsync(configEndpoint, new HttpDocumentRetriever(), cancellationToken);
+                HttpClientHandler handler = new HttpClientHandler();
+                bool disableSslVerification = bool.TryParse(_configuration["disableSslVerification"], out bool result) && result;
+
+                if (disableSslVerification)
+                {
+                    _logger.LogWarning("SSL certificate validation is disabled due to disableSslVerification being set to true!");
+                    
+                    handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
+                }
+
+                var httpClient = new HttpClient(handler);
+                var documentRetriever = new HttpDocumentRetriever(httpClient);
+
+                openIdConnectConfiguration = await configurationRetriever.GetConfigurationAsync(configEndpoint, documentRetriever, cancellationToken);
             }
             catch (Exception ex)
             {

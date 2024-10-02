@@ -20,6 +20,9 @@ openIdProviderConfigurationUrl: "https://login.microsoftonline.com/common/v2.0/.
 # Log Level(Trace, Debug, Information, Warning, Error, Critical, and None)
 logLevel: Information
 
+# SSL verification
+disableSslVerification: false
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: true

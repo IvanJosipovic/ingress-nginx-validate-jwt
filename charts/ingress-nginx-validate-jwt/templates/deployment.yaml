@@ -34,6 +34,8 @@ spec:
             value: "{{ .Values.openIdProviderConfigurationUrl }}"
           - name: "Logging__LogLevel__Default"
             value: "{{ .Values.logLevel }}"
+          - name: "disableSslVerification"
+            value: "{{ .Values.disableSslVerification }}"
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
