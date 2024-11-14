@@ -5,7 +5,7 @@
 [![Docker Hub](https://img.shields.io/docker/pulls/ivanjosipovic/ingress-nginx-validate-jwt?label=Docker%20Hub)](https://hub.docker.com/r/ivanjosipovic/ingress-nginx-validate-jwt)
 [![GitHub](https://img.shields.io/github/stars/ivanjosipovic/ingress-nginx-validate-jwt?style=social)](https://github.com/IvanJosipovic/ingress-nginx-validate-jwt)
 
-| :exclamation:  Check out my new project [OIDC-Guard](https://github.com/IvanJosipovic/OIDC-Guard), which supports JWT and Cookie Authentication! |
+| :exclamation:  This project has been superseded by [OIDC-Guard](https://github.com/IvanJosipovic/OIDC-Guard), which provides authentication and authorization for both APIs and web applications, supporting JWT, cookie authentication, and more! |
 |-----------------------------------------|
 
 ## What is this?
