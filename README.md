@@ -1,9 +1,10 @@
 # ingress-nginx-validate-jwt
 
 [![codecov](https://codecov.io/gh/IvanJosipovic/ingress-nginx-validate-jwt/branch/main/graph/badge.svg?token=hh1FWYrH5r)](https://codecov.io/gh/IvanJosipovic/ingress-nginx-validate-jwt)
-[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/ingress-nginx-validate-jwt)](https://artifacthub.io/packages/helm/ingress-nginx-validate-jwt/ingress-nginx-validate-jwt)
-[![Docker Hub](https://img.shields.io/docker/pulls/ivanjosipovic/ingress-nginx-validate-jwt?label=Docker%20Hub)](https://hub.docker.com/r/ivanjosipovic/ingress-nginx-validate-jwt)
 [![GitHub](https://img.shields.io/github/stars/ivanjosipovic/ingress-nginx-validate-jwt?style=social)](https://github.com/IvanJosipovic/ingress-nginx-validate-jwt)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/ingress-nginx-validate-jwt)](https://artifacthub.io/packages/helm/ingress-nginx-validate-jwt/ingress-nginx-validate-jwt)
+![Downloads](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fipitio%2Fbackage%2Frefs%2Fheads%2Findex%2FIvanJosipovic%2Fingress-nginx-validate-jwt%2Fingress-nginx-validate-jwt%25252Fingress-nginx-validate-jwt.json&query=%24.downloads&label=downloads)
+[![Docker Pulls](https://img.shields.io/docker/pulls/ivanjosipovic/ingress-nginx-validate-jwt?label=docker%20pulls)](https://hub.docker.com/r/ivanjosipovic/ingress-nginx-validate-jwt)
 
 | :exclamation:  This project has been superseded by [OIDC-Guard](https://github.com/IvanJosipovic/OIDC-Guard), which provides authentication and authorization for both APIs and web applications, supporting JWT, cookie authentication, and more! |
 |-----------------------------------------|
