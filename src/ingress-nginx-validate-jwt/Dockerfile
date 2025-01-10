@@ -17,7 +17,7 @@ EXPOSE 8080
 ENV ASPNETCORE_URLS=http://+:8080
 
 # renovate: datasource=repology depName=alpine_3_19/ca-certificates-bundle versioning=loose
-ENV CA_CERTIFICATES_BUNDLES_VERSION="20241121-r0"
+ENV CA_CERTIFICATES_BUNDLES_VERSION="20241121-r1"
 
 # renovate: datasource=repology depName=alpine_3_19/busybox versioning=loose
 ENV BUSYBOX_VERSION="1.36.1-r19"
